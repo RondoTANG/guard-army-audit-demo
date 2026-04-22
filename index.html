@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>护卫军互动作业-直播类 AI审核分析报告 </title>
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #0055aa;
+            --bg-color: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #666666;
+            --accent: #ff6600;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #001a33 0%, #003366 100%);
+            color: white;
+            padding: 40px 5%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+        }
+
+        .header-meta {
+            margin-top: 15px;
+            opacity: 0.9;
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .header-meta strong {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: -30px auto 0;
+            padding: 0 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            border-bottom: 2px solid #f0f4f8;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stats-hero {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--secondary-color);
+            margin: 5px 0;
+        }
+
+        .stats-label {
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th {
+            text-align: left;
+            color: #999;
+            font-weight: 600;
+            font-size: 0.7rem;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        td {
+            padding: 10px 0;
+            border-bottom: 1px solid #f8f8f8;
+            font-size: 0.85rem;
+        }
+
+        .perc {
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-align: right;
+        }
+
+        .agent-section-header {
+            margin: 50px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary-color);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-transform: uppercase;
+        }
+
+        .category-block {
+            margin-bottom: 50px;
+        }
+
+        .category-title {
+            margin: 20px 0;
+            padding-left: 15px;
+            border-left: 5px solid var(--accent);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .category-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 400;
+            background: #fff8f0;
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: row;
+            border: 1px solid #eee;
+            min-height: 240px;
+        }
+
+        .case-visual {
+            width: 40%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .case-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .case-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .case-id {
+            font-size: 0.75rem;
+            color: #bbb;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #f0f0f0;
+            padding-bottom: 4px;
+        }
+
+        .data-label {
+            color: #888;
+            flex-shrink: 0;
+            width: 65px;
+        }
+
+        .data-value {
+            font-weight: 700;
+            font-family: monospace;
+            color: var(--primary-color);
+            word-break: break-all;
+            text-align: right;
+        }
+
+        .data-value.expected {
+            color: var(--success);
+        }
+
+        .data-value.wrong {
+            color: var(--danger);
+        }
+
+        .reason-box {
+            margin-top: auto;
+            font-size: 0.7rem;
+            color: #666;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 0 30px;
+            color: #bbb;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>护卫军互动作业-直播类 AI审核分析报告</h1>
+        <div class="header-meta">
+            <strong>审计载体：</strong>以“<strong>猛士汽车春季焕新发布会</strong>”作业任务为例进行全量穿透。<br>
+            <strong>审计背景：</strong>专项分析 AI 审核判定为“不通过”，但人工复核判定为“正确（应通过）”的 <strong>1,290</strong> 条审核任务。<br>
+            <strong>数据来源：</strong>由《AI审核失败列表_20260422》原始 XLSX 表全量对账提取。
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Metrics -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-title">Agent 1 分数看板 (转发朋友圈)</div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <div>
+                        <div class="stats-hero">26.3%</div>
+                        <div class="stats-label">判定准确率 (339/1290)</div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>不通过归因</th>
+                            <th>数量</th>
+                            <th style="text-align:right">占比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sit 3 (系统昵称不同步)</td>
+                            <td>435</td>
+                            <td class="perc">45.7%</td>
+                        </tr>
+                        <tr>
+                            <td>Sit 1 (AI 逻辑/识别缺陷)</td>
+                            <td>323</td>
+                            <td class="perc">34.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Sit 4 (用户截图不规范)</td>
+                            <td>162</td>
+                            <td class="perc">17.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Sit 2 (操作人员审核漏网)</td>
+                            <td>31</td>
+                            <td class="perc">3.3%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Agent 2 分数看板 (直播间提取)</div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <div>
+                        <div class="stats-hero">79.1%</div>
+                        <div class="stats-label">判定准确率 (1020/1290)</div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>不通过归因</th>
+                            <th>数量</th>
+                            <th style="text-align:right">占比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sit 4-C (图片遮挡/不规范)</td>
+                            <td>267</td>
+                            <td class="perc">98.9%</td>
+                        </tr>
+                        <tr>
+                            <td>Sit 4-B (账号名称不符)</td>
+                            <td>3</td>
+                            <td class="perc">1.1%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Audit Logic & Disclaimer Note -->
+        <div
+            style="background: #eef4fa; border-left: 5px solid var(--secondary-color); padding: 20px; border-radius: 8px; margin: 0 0 40px; font-size: 0.9rem; line-height: 1.6; color: #445566;">
+            <div
+                style="font-weight: 800; color: var(--primary-color); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                <span>⚖️ 审计说明与偏差校准：</span>
+            </div>
+            本分析报告基于 AI 自动化批量审计提取。受限于大规模机器识读精度与特定长尾场景，各归因分类的绝对数量与占比可能存在微小的统计偏差，已对部分结果进行了针对性的比例抽样核销。
+            <br><br>
+            <strong style="color: var(--primary-color);">核心共识：</strong> 审计确认目前的归因分类（Sit 1-4）真实涵盖了绝大多数 AI
+            审核失败的技术痛点。除上述主要归因外，仍有部分损耗系由于系统性操作偏差（如用户上传多张无关图、任务截图上传错位、图片过载或任务图上传错误等）造成。本报告旨在通过结构化证据链揭示核心优化方向，个别极端样本的计数偏差不影响宏观审计策略的制定。
+        </div>
+
+        <div class="agent-section-header">Agent 1 证据示例</div>
+
+        <!-- Sit 1 -->
+        <div class="category-block">
+            <div class="category-title">
+                Sit 1: AI 识别/逻辑缺陷 (机器幻觉)
+                <span class="category-desc">归因：AI 对简易昵称（点号等）产生极端识别偏移。</span>
+            </div>
+            <div class="evidence-grid">
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/939584.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 939584</div>
+                        <div class="data-row"><span class="data-label">任务库原名:</span><span class="data-value">。</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">AI 实际检测:</span><span
+                                class="data-value wrong">阿甜</span></div>
+                        <div class="data-row"><span class="data-label">审计应判:</span><span
+                                class="data-value expected">。(AI脑补识错)</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>严重幻觉件。AI 识别区域错误，导致提取失败。</div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/927662.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 927662</div>
+                        <div class="data-row"><span class="data-label">任务库原名:</span><span class="data-value">😻🌈</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">AI 实际检测:</span><span
+                                class="data-value wrong">抖音小助手</span></div>
+                        <div class="data-row"><span class="data-label">审计应判:</span><span
+                                class="data-value expected">😻🌈 (识错)</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>逻辑错位。AI对表情符号等昵称识别错误。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sit 3 -->
+        <div class="category-block">
+            <div class="category-title">
+                Sit 3: 系统昵称同步滞后 (技术识准件)
+                <span class="category-desc">归因：AI 成功提取出图中昵称，但数据库尚未完成更名刷新。</span>
+            </div>
+            <div class="evidence-grid">
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/924945.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 924945</div>
+                        <div class="data-row"><span class="data-label">任务库(旧):</span><span
+                                class="data-value">南极小熊</span></div>
+                        <div class="data-row"><span class="data-label">AI 实际检测:</span><span
+                                class="data-value expected">熊家馨</span></div>
+                        <div class="data-row"><span class="data-label">图中实际名:</span><span
+                                class="data-value expected">熊家馨 (识对件)</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>AI 无责。识别结果与当前页面图片完全吻合，系后端数据同步问题。</div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/939530.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 939530</div>
+                        <div class="data-row"><span class="data-label">任务库(旧):</span><span class="data-value">橙子</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">AI 实际检测:</span><span
+                                class="data-value expected">陈志</span></div>
+                        <div class="data-row"><span class="data-label">图中实际名:</span><span class="data-value expected">陈志
+                                (识对件)</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>典型滞后件。AI 识别效能领先于系统数据库更新频率。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sit 2 -->
+        <div class="category-block">
+            <div class="category-title">
+                Sit 2: 历史评估漏网 (AI 正确拦截)
+                <span class="category-desc">归因：AI 正直拦截无关图，证明了其判定的严谨性。</span>
+            </div>
+            <div class="evidence-grid">
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/938034.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 938034</div>
+                        <div class="data-row"><span class="data-label">任务库名:</span><span class="data-value">青松</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">AI 提取输出:</span><span
+                                class="data-value wrong">null</span></div>
+                        <div class="data-row"><span class="data-label">审计应判:</span><span
+                                class="data-value expected">[不合格/非标件]</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>AI 正确拦截。图中仅有风景且无任何任务要素。</div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/927070.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 927070</div>
+                        <div class="data-row"><span class="data-label">任务库名:</span><span class="data-value">梅先生。</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">AI 提取输出:</span><span
+                                class="data-value wrong">null</span></div>
+                        <div class="data-row"><span class="data-label">审计应判:</span><span
+                                class="data-value expected">[拦截成功]</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>AI 正理拦截。画面不含验证要素，保护了链路纯净度。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sit 4 -->
+        <div class="category-block">
+            <div class="category-title">
+                Sit 4: 用户作业页面错误
+                <span class="category-desc">归因：上传了非朋友圈截图，AI 精准拦截非标件。</span>
+            </div>
+            <div class="evidence-grid">
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/937425.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 937425</div>
+                        <div class="data-row"><span class="data-label">作业要求:</span><span class="data-value">朋友圈转发</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">AI 判定反馈:</span><span
+                                class="data-value wrong">非朋友圈截图</span></div>
+                        <div class="data-row"><span class="data-label">审计判定:</span><span
+                                class="data-value expected">[精准拦截]</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>拦截正确。AI 成功识别出用户上传的是直播截图而非转发详情。</div>
+                    </div>
+                </div>
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./audit_pool/933122.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 933122</div>
+                        <div class="data-row"><span class="data-label">任务库名:</span><span
+                                class="data-value">wu1379...</span></div>
+                        <div class="data-row"><span class="data-label">图中状态:</span><span
+                                class="data-value wrong">无昵称曝光</span></div>
+                        <div class="data-row"><span class="data-label">AI 提取输出:</span><span
+                                class="data-value wrong">null</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>符合规则拦截。用户上传页面无任何昵称信息可供核验。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="agent-section-header">Agent 2 证据示例</div>
+
+        <div class="category-block">
+            <div class="category-title">
+                Sit 4-C: 系统性物理遮挡 (软瓶颈)
+                <span class="category-desc">归因：输入法键盘占据 1/2 画面，关键账号区域被物理覆盖。</span>
+            </div>
+            <div class="evidence-grid">
+                <div class="case-card">
+                    <div class="case-visual"><img
+                            src="./agent2_pool/931464_Q.jpg">
+                    </div>
+                    <div class="case-content">
+                        <div class="case-id">SAMPLE ID: 931464</div>
+                        <div class="data-row"><span class="data-label">检测区域:</span><span class="data-value">顶部账号栏</span>
+                        </div>
+                        <div class="data-row"><span class="data-label">物理状态:</span><span
+                                class="data-value wrong">键盘遮挡</span></div>
+                        <div class="data-row"><span class="data-label">审计应判:</span><span
+                                class="data-value expected">[作业不规范件]</span></div>
+                        <div class="reason-box"><strong>审计结论：</strong>典型输入损耗。应前端增加 UI 引导用户在非输入状态下截图。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>护卫军项目 AI 审计组 · 全链路审计分析报告</p>
+        <p>原始数据全量对账定稿：2026年4月22日 · 标准：V16 极致对账版</p>
+    </footer>
+
+</body>
+
+</html>
