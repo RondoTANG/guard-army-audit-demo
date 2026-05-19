@@ -1157,6 +1157,11 @@
               <td><span class="badge badge-neutral">Array&lt;Object&gt;</span></td>
               <td>包含用户上传的每一张图片的详尽解析、特征提取、判罚依据与去重指纹数组（见下文）。</td>
             </tr>
+            <tr>
+              <td><code style="font-weight:bold;">conversation_id</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td><strong>智能体调用记录ID</strong>：该工单AI审核调用在智能体(Agent)底层的唯一轨迹跟踪ID，方便追溯和排障追踪。</td>
+            </tr>
           </tbody>
         </table>
 
@@ -1427,7 +1432,13 @@
 
         <!-- AI AUDIT RESULTS (NEW AND IMPROVED HIGH FIDELITY LAYOUT) -->
         <div>
-          <div class="section-title">AI智能审核结果明细</div>
+          <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>AI智能审核结果明细</span>
+            <span style="font-size: 11px; font-weight: normal; color: #888; font-family: monospace; display: flex; align-items: center; gap: 4px;">
+              Conversation ID: <span id="conversationIdVal" style="color: #1890ff; font-weight: bold;">a5176eca-5b70-4cea-bbf7-168c4443c286</span>
+              <span class="dev-tip" title="API对接参考&#10;对应字段: conversation_id (String)&#10;说明: 智能体(Agent)底层调用记录的唯一标识，用于全链路调用追踪和申诉定位">?</span>
+            </span>
+          </div>
 
           <!-- AI Summary Card -->
           <div class="ai-summary-card">
@@ -1608,6 +1619,7 @@
         userId: '1948340119828070402',
         userNick: '龙俊杰',
         mainStatus: '基础审核成功',
+        conversationId: 'a5176eca-5b70-4cea-bbf7-168c4443c286',
         materials: [
           { type: '朋友圈转发图', url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80' },
           { type: '直播间评论图 1', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=80' },
@@ -1694,6 +1706,7 @@
         userId: '1993470374084096001',
         userNick: '张继虹',
         mainStatus: '基础审核成功',
+        conversationId: '51c12d88-cad1-4fee-b448-006c33ec9293',
         materials: [
           { type: '直播间评论图 1', url: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1000&q=80' },
           { type: '直播间评论图 2', url: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=1000&q=80' },
@@ -1792,6 +1805,7 @@
         userId: '1955883210984712301',
         userNick: '王大锤',
         mainStatus: '基础审核失败',
+        conversationId: 'afa55f3c-366f-426d-9168-94bbd1e41cb0',
         materials: [
           { type: '朋友圈转发图', url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80' },
           { type: '直播间评论图 1', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=80' }
@@ -1853,6 +1867,7 @@
         userId: '1988273910283749201',
         userNick: '李雷',
         mainStatus: '基础审核成功',
+        conversationId: '02b66e78-5b73-4c37-8815-00ac79941bb5',
         materials: [
           { type: '朋友圈转发图', url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80' },
           { type: '直播间评论图 1', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=80' },
@@ -1988,6 +2003,12 @@
       const activeBtn = document.getElementById(`btn_${key}`);
       if (activeBtn) {
         activeBtn.classList.add('active');
+      }
+
+      // Update Conversation ID
+      const convIdEl = document.getElementById('conversationIdVal');
+      if (convIdEl) {
+        convIdEl.textContent = data.conversationId || 'N/A';
       }
 
       // Update Basic Infos
