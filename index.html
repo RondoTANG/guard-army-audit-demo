@@ -1238,7 +1238,7 @@
               <td>兜底标识，朋友圈图片固定返回 <code style="color:#389e0d; font-weight:bold;">true</code>。</td>
             </tr>
             <tr>
-              <td><code style="font-weight:bold;">nickname_match_status</code></td>
+              <td><code style="font-weight:bold;">name_match_status</code></td>
               <td><span class="badge badge-neutral">String</span></td>
               <td>发帖人昵称比对状态。枚举：<code style="color:#389e0d; font-weight:bold;">MATCHED</code> (完全一致), <code
                   style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (未提取到昵称), <code
@@ -1291,9 +1291,9 @@
               <td><strong>直播间主体是否达标</strong>：结合严格字符匹配与车企品牌（东风、猛士等）语义兜底比对得出的综合判定。</td>
             </tr>
             <tr>
-              <td><code style="font-weight:bold;">name_match_status</code></td>
+              <td><code style="font-weight:bold;">livename_match_status</code></td>
               <td><span class="badge badge-neutral">String</span></td>
-              <td>账号名纯字面匹配结果：<code style="color:#389e0d; font-weight:bold;">MATCHED</code>, <code
+              <td>直播间账号名纯字面匹配结果：<code style="color:#389e0d; font-weight:bold;">MATCHED</code>, <code
                   style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (空值提取), <code
                   style="color:#cf1322; font-weight:bold;">MISMATCHED</code>。</td>
             </tr>
@@ -1306,6 +1306,13 @@
               <td><code style="font-weight:bold;">user_comment_found</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
               <td>是否在公屏列表或底部第一人称输入框成功寻获对应绑定用户的有效评论。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">name_match_status</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>评论用户昵称匹配状态：<code style="color:#389e0d; font-weight:bold;">MATCHED</code> (实际评论昵称与输入 user_nickname 一致), <code
+                  style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (未找到评论), <code
+                  style="color:#cf1322; font-weight:bold;">MISMATCHED</code> (找到评论但昵称不一致)。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">user_comment</code></td>
@@ -1503,7 +1510,7 @@
                     title="API对接参考&#10;对应字段: category&#10;取值: 'moments' 或 'live_stream'">?</span></th>
                 <th style="width: 320px;">AI审核问题 <span class="dev-tip" title="根据业务规则配置的多图核验问询矩阵">?</span></th>
                 <th style="width: 250px;">AI答案 (含原因) <span class="dev-tip"
-                    title="API核心字段: nickname_match_status, name_match_status, user_comment, is_duplicate 等">?</span>
+                    title="API核心字段: name_match_status, livename_match_status, user_comment, is_duplicate 等">?</span>
                 </th>
                 <th style="width: 90px; text-align:center;">设置答案</th>
                 <th>审核详情与证据链说明 <span class="dev-tip" title="API核心字段: reason & debug_info&#10;输出去重防伪时间差与雷同度精确数据">?</span>
