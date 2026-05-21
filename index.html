@@ -1252,7 +1252,7 @@
             <tr>
               <td><code style="font-weight:bold;">is_live_stream</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>是否带有“红色直播中/灰色直播结束”状态标识或底部视频号来源挂件条。</td>
+              <td>是否带有“红色直播中/灰色直播结束”状态标识或底部视频号来源挂件条。<br/><span style="color:#cf1322; font-weight:600; font-size:12px;">【拦截强校验】：后端验证代码已收紧，要求 <code>match == true</code> 且 <code>is_live_stream == true</code> 同时满足时，该截图的 <code>status</code> 才会判定为 <code>passed</code>。</span></td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">live_status</code></td>
