@@ -3342,6 +3342,10 @@
 
     // Main Tab Switching Function
     function switchMainTab(tabKey) {
+      if (window.location.hash !== '#' + tabKey) {
+        window.history.replaceState(null, null, '#' + tabKey);
+      }
+
       const tabAudit = document.getElementById('main_tab_audit');
       const tabGuide = document.getElementById('main_tab_guide');
       const tabGuideNew = document.getElementById('main_tab_guide_new');
@@ -3372,10 +3376,23 @@
       }
     }
 
-    // Auto-open modal on load for demo showcase
+    // Auto-open modal on load or navigate to guide based on URL hash
     window.onload = function () {
-      openModal('fwcm');
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'guide' || hash === 'guide_new') {
+        switchMainTab(hash);
+      } else {
+        switchMainTab('audit');
+        openModal('fwcm');
+      }
     };
+
+    window.addEventListener('hashchange', function() {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'guide' || hash === 'guide_new' || hash === 'audit') {
+        switchMainTab(hash);
+      }
+    });
   </script>
 </body>
 
