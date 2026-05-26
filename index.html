@@ -1489,6 +1489,95 @@
               style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-family:monospace;">命中去重(与图1) - 时差:0m, 评论相似:1.00, 画面相似:0.85</code>），为运营申诉排障提供无死角实锤数据。
           </div>
         </div>
+
+        <h2
+          style="font-size: 18px; color: #0050b3; margin: 36px 0 16px 0; border-left: 4px solid #1890ff; padding-left: 10px; font-weight: 600;">
+          五、 返回结果示例 (finalresult JSON)</h2>
+        <p>以下是经过多模态大模型判定并由 Python 去重节点结算后输出的 <code style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-family:monospace; color:#0050b3; font-weight:600;">finalresult</code> JSON 示例。该示例覆盖了转发图验证通过、有效评论去重防伪、作弊重复图拦截等多重场景：</p>
+        <pre style="background: #f5f5f5; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; border: 1px solid #e8e8e8; line-height: 1.5; font-family: 'Courier New', Courier, monospace;"><code class="language-json">{
+  "task_passed": true,
+  "forwarding_passed": true,
+  "comments_passed_count": 2,
+  "required_comments": 2,
+  "final_valid_count": 2,
+  "message": "转发已通过；评论去重通过 2 张 (达标)",
+  "detailed_results": [
+    {
+      "index": "0",
+      "imageurl": "https://example.com/moment.jpg",
+      "imagename": "朋友圈截图.jpg",
+      "category": "moments",
+      "is_wechat_moment": true,
+      "match": true,
+      "moments_list": [
+        {
+          "name_match_status": "MATCHED",
+          "user_nickname_extracted": "张三",
+          "text_match": true,
+          "text": "东风日产大卖！",
+          "publisher_nickname": "东风日产"
+        }
+      ],
+      "status": "passed",
+      "reason": "有效的微信朋友圈截图"
+    },
+    {
+      "index": "1",
+      "imageurl": "https://example.com/live1.jpg",
+      "imagename": "直播间截图1.jpg",
+      "category": "live_stream",
+      "is_live_stream": true,
+      "match": true,
+      "name_match_status": "MATCHED",
+      "livename_match_status": "MATCHED",
+      "user_comment": "主播好美啊",
+      "fingerprint_time": "14:20",
+      "fingerprint_comments": "李四:支持|王五:大气",
+      "fingerprint_visual": "左侧飘窗",
+      "debug_info": "首张有效图，作为防伪基准",
+      "is_duplicate": false,
+      "status": "passed",
+      "reason": "首张有效图"
+    },
+    {
+      "index": "2",
+      "imageurl": "https://example.com/live2.jpg",
+      "imagename": "直播间截图2_连拍.jpg",
+      "category": "live_stream",
+      "is_live_stream": true,
+      "match": true,
+      "name_match_status": "MATCHED",
+      "livename_match_status": "MATCHED",
+      "user_comment": "再发一条",
+      "fingerprint_time": "14:20",
+      "fingerprint_comments": "李四:支持|王五:大气",
+      "fingerprint_visual": "左侧飘窗",
+      "debug_info": "命中去重(与前图) - 时差:0m, 评论相似:1.00, 画面相似:1.00",
+      "is_duplicate": true,
+      "status": "failed",
+      "reason": "与前置通过的图片极度相似，判定为作弊重复图"
+    },
+    {
+      "index": "3",
+      "imageurl": "https://example.com/live3.jpg",
+      "imagename": "直播间截图3.jpg",
+      "category": "live_stream",
+      "is_live_stream": true,
+      "match": true,
+      "name_match_status": "MATCHED",
+      "livename_match_status": "MATCHED",
+      "user_comment": "换个姿势截图",
+      "fingerprint_time": "14:25",
+      "fingerprint_comments": "赵六:价格多少|测试:冲冲冲",
+      "fingerprint_visual": "右侧飘窗",
+      "debug_info": "未命中去重(参考前图) - 时差:5m, 评论相似:0.12, 画面相似:0.35",
+      "is_duplicate": false,
+      "status": "passed",
+      "reason": "去重通过"
+    }
+  ]
+}</code></pre>
+
       </div>
 
       <!-- Tab 3: New Interactive Comments AI Audit Guide Doc -->
