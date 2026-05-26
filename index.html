@@ -1145,9 +1145,9 @@
           <tbody>
             <tr>
               <td><code style="font-weight:bold; color:#1890ff;">images</code></td>
-              <td><span class="badge badge-neutral">Array&lt;String&gt;</span></td>
+              <td><span class="badge badge-neutral">Array&lt;Img&gt;</span></td>
               <td><span style="color:#cf1322; font-weight:bold;">必填</span></td>
-              <td>用户提交上传的待审图片二进制流或绝对网络 URL 数组，将送入多模态大模型循环进行分类提取。</td>
+              <td>必填，图片上传文件列表。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold; color:#1890ff;">checktype</code></td>
@@ -1575,8 +1575,8 @@
             </tr>
             <tr>
               <td><code>img</code></td>
-              <td><code>[{"url":"..."}]</code></td>
-              <td>必填，可上传多张截图</td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
             </tr>
           </table>
 
@@ -1652,8 +1652,8 @@
             </tr>
             <tr>
               <td><code>img</code></td>
-              <td><code>[{"url":"..."}]</code></td>
-              <td>必填，可上传多图（点赞图+转发图）</td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
             </tr>
             <tr>
               <td><code>user_nickname</code></td>
@@ -1805,8 +1805,8 @@
             </tr>
             <tr>
               <td><code>img</code></td>
-              <td><code>[{"url":"..."}]</code></td>
-              <td>必填，可上传多图</td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
             </tr>
           </table>
 
@@ -1901,8 +1901,8 @@
             </tr>
             <tr>
               <td><code>img</code></td>
-              <td><code>[{"url":"..."}]</code></td>
-              <td>必填，评论截图列表</td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
             </tr>
             <tr>
               <td><code>num</code></td>
