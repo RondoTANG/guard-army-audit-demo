@@ -146,6 +146,8 @@
       border-radius: 4px;
       margin: 0 10px;
       padding-left: 25px;
+      font-weight: 600;
+      text-shadow: 0 0 0 #fff;
     }
 
     /* Content Area */
@@ -503,8 +505,9 @@
       border-radius: var(--border-radius);
       padding: 12px 16px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
 
     .platform-title {
@@ -618,6 +621,7 @@
     /* Scenario Switch Button Group */
     .scenario-btn-group {
       display: inline-flex;
+      flex-wrap: wrap;
       gap: 6px;
     }
 
@@ -888,8 +892,8 @@
         <div class="menu-title">护卫军作业管理 <span>▲</span></div>
         <div class="menu-item">作业管理</div>
         <div class="menu-item active" id="side_menu_audit" onclick="switchMainTab('audit')">人工审核</div>
-        <div class="menu-item" id="side_menu_guide" style="color: #1890ff; font-weight: 500;"
-          onclick="switchMainTab('guide')">💡 视频号/抖音AI开发指南</div>
+        <div class="menu-item" id="side_menu_guide" onclick="switchMainTab('guide')">💡 视频号/抖音AI开发指南</div>
+        <div class="menu-item" id="side_menu_guide_new" onclick="switchMainTab('guide_new')">💡 互动评论AI开发指南</div>
         <div class="menu-item">反馈审核列表</div>
         <div class="menu-item">作业审核记录</div>
       </div>
@@ -901,15 +905,12 @@
     <!-- Main Content Area -->
     <div class="content-area">
       <!-- Tabs -->
-      <div class="tabs-container">
+      <div class="tabs-container" id="tabs_container_audit">
         <div class="tab" onclick="switchMainTab('audit')">待人工审核护卫军作业 (0)</div>
         <div class="tab" onclick="switchMainTab('audit')">待人工批量审核图片作业 (0)</div>
         <div class="tab active" id="tab_btn_audit" onclick="switchMainTab('audit')">待人工批量审核作业 (14531)</div>
         <div class="tab" onclick="switchMainTab('audit')">待人工审核申诉 (108)</div>
         <div class="tab" onclick="switchMainTab('audit')">待人工审核反馈作业 (14)</div>
-        <div class="tab" id="tab_btn_guide"
-          style="background:#e6f7ff; color:#0050b3; border-color:#91d5ff; font-weight:bold; display:flex; align-items:center; gap:6px;"
-          onclick="switchMainTab('guide')">💡 <span>视频号/抖音直播AI审核开发指南</span></div>
       </div>
 
       <!-- Tab 1: Audit List -->
@@ -926,15 +927,31 @@
               </select>
             </div>
             <div class="filter-item">
-              <span class="filter-label">作业类型</span>
+              <span class="filter-label">小类型</span>
               <select class="select-field">
                 <option>请选择</option>
+                <option>点赞帖子（图片）</option>
+                <option>点赞帖子评论类（图片）</option>
+                <option>评论（文本或图片）</option>
+                <option>直播</option>
               </select>
             </div>
             <div class="filter-item">
               <span class="filter-label">作业平台</span>
               <select class="select-field">
                 <option>请选择</option>
+                <option>微信视频号</option>
+                <option>微信公众号</option>
+                <option>抖音直播</option>
+                <option>视频号直播</option>
+                <option>知乎</option>
+                <option>小红书</option>
+                <option>B站</option>
+                <option>快手</option>
+                <option>微信</option>
+                <option>头条</option>
+                <option>抖音</option>
+                <option>微博</option>
               </select>
             </div>
             <div class="filter-item">
@@ -961,6 +978,7 @@
                 <th>作业名称</th>
                 <th>作业ID</th>
                 <th>作业类型</th>
+                <th>小类型</th>
                 <th>作业平台</th>
                 <th>用户ID</th>
                 <th>姓名</th>
@@ -976,6 +994,7 @@
                 <td><a href="#" class="link-btn" onclick="openModal('fwcm')">东风汽车庆祝“五一”国际劳动节·“五四”青年节主题大会 (视频号)</a></td>
                 <td>711656354665861120</td>
                 <td>互动作业</td>
+                <td>直播</td>
                 <td>微信视频号</td>
                 <td>1948340119828070402</td>
                 <td>龙俊杰</td>
@@ -989,6 +1008,7 @@
                 <td><a href="#" class="link-btn" onclick="openModal('cm')">猛士汽车春季焕新发布会直播评论任务 (抖音)</a></td>
                 <td>711656648489439232</td>
                 <td>互动作业</td>
+                <td>直播</td>
                 <td>抖音直播</td>
                 <td>1993470374084096001</td>
                 <td>张继虹</td>
@@ -1002,6 +1022,7 @@
                 <td><a href="#" class="link-btn" onclick="openModal('fwcm_fail')">【异常用例】视频号转发截图审核失败模拟演示</a></td>
                 <td>711656889102345678</td>
                 <td>互动作业</td>
+                <td>直播</td>
                 <td>微信视频号</td>
                 <td>1955883210984712301</td>
                 <td>王大锤</td>
@@ -1015,6 +1036,7 @@
                 <td><a href="#" class="link-btn" onclick="openModal('fwcm_partial')">【按件计酬】视频号单张评论合格部分达标演示</a></td>
                 <td>711656992103485721</td>
                 <td>互动作业</td>
+                <td>直播</td>
                 <td>微信视频号</td>
                 <td>1988273910283749201</td>
                 <td>李雷</td>
@@ -1023,6 +1045,48 @@
                     style="background-color:#e6f7ff; border-color:#91d5ff; color:#1890ff;">部分达标</span></td>
                 <td><span class="link-btn" onclick="openModal('fwcm_partial')">审核</span></td>
               </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>5</td>
+                <td><a href="#" class="link-btn" onclick="openModal('dzxh')">公众号推文点赞任务演示</a></td>
+                <td>711656992103485725</td>
+                <td>互动作业</td>
+                <td>点赞帖子（图片）</td>
+                <td>微信公众号</td>
+                <td>1988273910283749205</td>
+                <td>王大拿</td>
+                <td>2026-05-19 10:00:00</td>
+                <td><span class="badge badge-success">审核成功</span></td>
+                <td><span class="link-btn" onclick="openModal('dzxh')">审核</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>6</td>
+                <td><a href="#" class="link-btn" onclick="openModal('dzpl')">小红书点赞评论任务演示</a></td>
+                <td>711656992103485726</td>
+                <td>互动作业</td>
+                <td>点赞帖子评论类（图片）</td>
+                <td>小红书</td>
+                <td>1988273910283749206</td>
+                <td>赵小花</td>
+                <td>2026-05-20 11:30:00</td>
+                <td><span class="badge badge-success">审核成功</span></td>
+                <td><span class="link-btn" onclick="openModal('dzpl')">审核</span></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>7</td>
+                <td><a href="#" class="link-btn" onclick="openModal('pinglun')">B站纯评论文本任务演示</a></td>
+                <td>711656992103485727</td>
+                <td>互动作业</td>
+                <td>评论（文本或图片）</td>
+                <td>B站</td>
+                <td>1988273910283749207</td>
+                <td>张三</td>
+                <td>2026-05-21 15:20:00</td>
+                <td><span class="badge badge-success">审核成功</span></td>
+                <td><span class="link-btn" onclick="openModal('pinglun')">审核</span></td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -1030,7 +1094,23 @@
 
       <!-- Tab 2: Developer AI Audit Guide Doc -->
       <div id="main_tab_guide"
-        style="display: none; padding: 32px 40px; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-top: 16px; font-size: 14px; line-height: 1.75; color: #333;">
+        style="display: none; padding: 32px 40px; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); font-size: 14px; line-height: 1.75; color: #333;">
+
+        <div style="margin-bottom: 20px;">
+          <button onclick="switchMainTab('audit')"
+            style="cursor: pointer; background: #fff; border: 1px solid #d9d9d9; padding: 6px 16px; border-radius: 4px; color: #666; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;"
+            onmouseover="this.style.color='#1890ff'; this.style.borderColor='#1890ff';"
+            onmouseout="this.style.color='#666'; this.style.borderColor='#d9d9d9';">
+            <svg viewBox="64 64 896 896" focusable="false" width="1em" height="1em" fill="currentColor"
+              aria-hidden="true">
+              <path
+                d="M872 474H286.9l309.1-309.1c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.4-33.9 0L206 487.1c-12.5 12.5-12.5 32.8 0 45.3l356.1 356.1c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.4-24.6 0-33.9L286.9 550H872c13.3 0 24-10.7 24-24s-10.7-26-24-26z">
+              </path>
+            </svg>
+            返回审核列表
+          </button>
+        </div>
+
         <div
           style="border-bottom: 2px solid #1890ff; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end;">
           <div>
@@ -1065,16 +1145,17 @@
           <tbody>
             <tr>
               <td><code style="font-weight:bold; color:#1890ff;">images</code></td>
-              <td><span class="badge badge-neutral">Array&lt;String&gt;</span></td>
+              <td><span class="badge badge-neutral">Array&lt;Img&gt;</span></td>
               <td><span style="color:#cf1322; font-weight:bold;">必填</span></td>
-              <td>用户提交上传的待审图片二进制流或绝对网络 URL 数组，将送入多模态大模型循环进行分类提取。</td>
+              <td>必填，图片上传文件列表。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold; color:#1890ff;">checktype</code></td>
               <td><span class="badge badge-neutral">String</span></td>
               <td><span style="color:#cf1322; font-weight:bold;">必填</span></td>
               <td>指定审核的作业平台模型。枚举值：<code style="color:#1890ff; font-weight:bold;">fwcm</code> (微信视频号，强制检查朋友圈转发与评论) 或
-                <code style="color:#1890ff; font-weight:bold;">cm</code> (抖音直播，仅查验评论数)。</td>
+                <code style="color:#1890ff; font-weight:bold;">cm</code> (抖音直播，仅查验评论数)。
+              </td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">cmnum</code></td>
@@ -1123,7 +1204,8 @@
               <td><span class="badge badge-neutral">Boolean</span></td>
               <td><strong>核心业务依据</strong>。判定整单工单是否总体通过。只要 <code style="color:#cf1322;">comments_passed_count > 0</code>
                 且视频号转发图有效，即为 <code style="color:#389e0d; font-weight:bold;">true</code>；若有效评论数为 0 或视频号转发图校验失败，则直接强制记为
-                <code style="color:#cf1322; font-weight:bold;">false</code>。</td>
+                <code style="color:#cf1322; font-weight:bold;">false</code>。
+              </td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">forwarding_passed</code></td>
@@ -1174,7 +1256,8 @@
 
         <h3
           style="font-size: 16px; color: #333; margin: 24px 0 12px 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-          <span>🔹</span><span>1. 通用基础字段 (所有图片对象有效)</span></h3>
+          <span>🔹</span><span>1. 通用基础字段 (所有图片对象有效)</span>
+        </h3>
         <table class="data-table" style="width: 100%; margin: 12px 0; font-size: 13px; line-height: 1.6;">
           <thead>
             <tr style="background:#fafafa;">
@@ -1190,7 +1273,7 @@
               <td>图片传入接口时的原始数组下标（用于前端回显对齐与溯源）。</td>
             </tr>
             <tr>
-              <td><code style="font-weight:bold;">name</code></td>
+              <td><code style="font-weight:bold;">imagename</code></td>
               <td><span class="badge badge-neutral">String</span></td>
               <td>图片的文件名或云存储 URL 标识。</td>
             </tr>
@@ -1222,7 +1305,8 @@
 
         <h3
           style="font-size: 16px; color: #333; margin: 30px 0 12px 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-          <span>🔹</span><span>2. 朋友圈转发图独有业务 Key (<code style="color:#1890ff;">category == "moments"</code>)</span></h3>
+          <span>🔹</span><span>2. 朋友圈转发图独有业务 Key (<code style="color:#1890ff;">category == "moments"</code>)</span>
+        </h3>
         <table class="data-table" style="width: 100%; margin: 12px 0; font-size: 13px; line-height: 1.6;">
           <thead>
             <tr style="background:#fafafa;">
@@ -1238,7 +1322,7 @@
               <td>兜底标识，朋友圈图片固定返回 <code style="color:#389e0d; font-weight:bold;">true</code>。</td>
             </tr>
             <tr>
-              <td><code style="font-weight:bold;">nickname_match_status</code></td>
+              <td><code style="font-weight:bold;">name_match_status</code></td>
               <td><span class="badge badge-neutral">String</span></td>
               <td>发帖人昵称比对状态。枚举：<code style="color:#389e0d; font-weight:bold;">MATCHED</code> (完全一致), <code
                   style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (未提取到昵称), <code
@@ -1252,7 +1336,10 @@
             <tr>
               <td><code style="font-weight:bold;">is_live_stream</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>是否带有“红色直播中/灰色直播结束”状态标识或底部视频号来源挂件条。</td>
+              <td>是否带有“红色直播中/灰色直播结束”状态标识或底部视频号来源挂件条。<br /><span
+                  style="color:#cf1322; font-weight:600; font-size:12px;">【拦截强校验】：后端验证代码已收紧，要求
+                  <code>match == true</code> 且 <code>is_live_stream == true</code> 同时满足时，该截图的 <code>status</code> 才会判定为
+                  <code>passed</code>。</span></td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">live_status</code></td>
@@ -1275,7 +1362,8 @@
         <h3
           style="font-size: 16px; color: #333; margin: 30px 0 12px 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
           <span>🔹</span><span>3. 直播间评论图独有去重与业务 Key (<code
-              style="color:#1890ff;">category == "live_stream"</code>)</span></h3>
+              style="color:#1890ff;">category == "live_stream"</code>)</span>
+        </h3>
         <table class="data-table" style="width: 100%; margin: 12px 0; font-size: 13px; line-height: 1.6;">
           <thead>
             <tr style="background:#fafafa;">
@@ -1291,9 +1379,9 @@
               <td><strong>直播间主体是否达标</strong>：结合严格字符匹配与车企品牌（东风、猛士等）语义兜底比对得出的综合判定。</td>
             </tr>
             <tr>
-              <td><code style="font-weight:bold;">name_match_status</code></td>
+              <td><code style="font-weight:bold;">livename_match_status</code></td>
               <td><span class="badge badge-neutral">String</span></td>
-              <td>账号名纯字面匹配结果：<code style="color:#389e0d; font-weight:bold;">MATCHED</code>, <code
+              <td>直播间账号名纯字面匹配结果：<code style="color:#389e0d; font-weight:bold;">MATCHED</code>, <code
                   style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (空值提取), <code
                   style="color:#cf1322; font-weight:bold;">MISMATCHED</code>。</td>
             </tr>
@@ -1306,6 +1394,13 @@
               <td><code style="font-weight:bold;">user_comment_found</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
               <td>是否在公屏列表或底部第一人称输入框成功寻获对应绑定用户的有效评论。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">name_match_status</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>评论用户昵称匹配状态：<code style="color:#389e0d; font-weight:bold;">MATCHED</code> (实际评论昵称与输入 user_nickname 一致),
+                <code style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (未找到评论), <code
+                  style="color:#cf1322; font-weight:bold;">MISMATCHED</code> (找到评论但昵称不一致)。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">user_comment</code></td>
@@ -1341,23 +1436,976 @@
           </tbody>
         </table>
 
-        <h2 style="font-size: 18px; color: #0050b3; margin: 36px 0 16px 0; border-left: 4px solid #1890ff; padding-left: 10px; font-weight: 600;">四、 评论图防伪去重算法与判定规则说明 (Deduplication Engine)</h2>
+        <h3
+          style="font-size: 16px; color: #333; margin: 30px 0 12px 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+          <span>🔹</span><span>4. 无效截图输出 (<code style="color:#1890ff;">category == "invalid"</code>)</span>
+        </h3>
+        <table class="data-table" style="width: 100%; margin: 12px 0; font-size: 13px; line-height: 1.6;">
+          <thead>
+            <tr style="background:#fafafa;">
+              <th>说明与判定准则</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>当模型判定图片既非朋友圈又非直播间（如纯聊天对话页、纯系统桌面或第三方APP截图）时，将归类为 <code>invalid</code>。<br />此时 JSON
+                结构中<strong>仅保留</strong>全局基础字段：<code
+                  style="font-weight:bold;">think, index, imagename, category</code>。<br />系统接收到该类型后直接熔断判定为不合格（非目标任务图片），极大节省了无意义的业务字段解析与回显逻辑。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2
+          style="font-size: 18px; color: #0050b3; margin: 36px 0 16px 0; border-left: 4px solid #1890ff; padding-left: 10px; font-weight: 600;">
+          四、 评论图防伪去重算法与判定规则说明 (Deduplication Engine)</h2>
         <p>为了有效防范刷单人员利用连拍截图、盗图录屏或多机位位移等作弊手段骗取积分，工作流在多模态特征识别后，独立运行了一套严密的三维去重与防伪存证算法：</p>
-        
-        <div style="background: #fdfefe; border: 1px solid #e6f7ff; border-radius: 6px; padding: 20px 24px; margin: 16px 0; box-shadow: 0 1px 4px rgba(24,144,255,0.05);">
-          <h3 style="font-size: 15px; color: #0050b3; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;"><span>🛡️</span><span>三维复合比对模型 (判定阈值)</span></h3>
-          <p style="margin: 0 0 12px 0; font-size: 13px; color: #666;">系统会取当前待判定的直播间截图与<strong>前置已通过的合规图片池</strong>逐一进行交叉比对。若以下三项指标<strong>同时触发判定阈值</strong>，则强制标记该图为作弊雷同图 (<code style="color:#cf1322;">is_duplicate = true</code>)：</p>
-          
+
+        <div
+          style="background: #fdfefe; border: 1px solid #e6f7ff; border-radius: 6px; padding: 20px 24px; margin: 16px 0; box-shadow: 0 1px 4px rgba(24,144,255,0.05);">
+          <h3
+            style="font-size: 15px; color: #0050b3; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+            <span>🛡️</span><span>三维复合比对模型 (判定阈值)</span></h3>
+          <p style="margin: 0 0 12px 0; font-size: 13px; color: #666;">
+            系统会取当前待判定的直播间截图与<strong>前置已通过的合规图片池</strong>逐一进行交叉比对。若以下三项指标<strong>同时触发判定阈值</strong>，则强制标记该图为作弊雷同图 (<code
+              style="color:#cf1322;">is_duplicate = true</code>)：</p>
+
           <ul style="padding-left: 20px; font-size: 13px; line-height: 1.8; color: #333; margin: 12px 0;">
-            <li><strong>1. 截屏时差过近 (<code style="color:#1890ff;">time_diff &lt; time_interval</code>)</strong>：自动提取通知栏手机时间戳计算绝对差值。若差值小于作业设定的最小间隔要求（默认 2 分钟，如 10:00 与 10:01 仅差 1 分钟），判定为短时间连拍嫌疑。</li>
-            <li><strong>2. 公屏弹幕指纹雷同度高 (<code style="color:#1890ff;">comments_sim &gt; 0.8</code>)</strong>：过滤掉用户本人的评论，将公屏其余路人弹幕拼接清洗后，利用序列哈希相似度计算文本差异。若重合度超过 80%，证明处于同场同一时段。</li>
-            <li><strong>3. 视觉空间构图高度相似 (<code style="color:#1890ff;">visual_sim &gt; 0.8</code>)</strong>：对比主播出镜位置、座舱角度、悬浮飘窗挂件等结构化视觉标签。若视觉空间构图特征重合度超过 80%，证明未发生场景切换。</li>
+            <li><strong>1. 截屏时差过近 (<code
+                  style="color:#1890ff;">time_diff &lt; time_interval</code>)</strong>：自动提取通知栏手机时间戳计算绝对差值。若差值小于作业设定的最小间隔要求（默认
+              2 分钟，如 10:00 与 10:01 仅差 1 分钟），判定为短时间连拍嫌疑。</li>
+            <li><strong>2. 公屏弹幕指纹雷同度高 (<code
+                  style="color:#1890ff;">comments_sim &gt; 0.8</code>)</strong>：过滤掉用户本人的评论，将公屏其余路人弹幕拼接清洗后，利用序列哈希相似度计算文本差异。若重合度超过
+              80%，证明处于同场同一时段。</li>
+            <li><strong>3. 视觉空间构图高度相似 (<code
+                  style="color:#1890ff;">visual_sim &gt; 0.8</code>)</strong>：对比主播出镜位置、座舱角度、悬浮飘窗挂件等结构化视觉标签。若视觉空间构图特征重合度超过
+              80%，证明未发生场景切换。</li>
           </ul>
 
           <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed #e8e8e8; font-size: 13px;">
-            <span style="color:#cf1322; font-weight:bold;">🚨 拦截结果与存证举证</span>：一旦判定为作弊，单图结算打上 <code style="color:#cf1322;">failed</code> 并不计入总分。同时系统会在 <code style="color:#1890ff;">debug_info</code> 中完整记录证据链（例如：<code style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-family:monospace;">命中去重(与图1) - 时差:0m, 评论相似:1.00, 画面相似:0.85</code>），为运营申诉排障提供无死角实锤数据。
+            <span style="color:#cf1322; font-weight:bold;">🚨 拦截结果与存证举证</span>：一旦判定为作弊，单图结算打上 <code
+              style="color:#cf1322;">failed</code> 并不计入总分。同时系统会在 <code style="color:#1890ff;">debug_info</code>
+            中完整记录证据链（例如：<code
+              style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-family:monospace;">命中去重(与图1) - 时差:0m, 评论相似:1.00, 画面相似:0.85</code>），为运营申诉排障提供无死角实锤数据。
           </div>
         </div>
+
+        <h2
+          style="font-size: 18px; color: #0050b3; margin: 36px 0 16px 0; border-left: 4px solid #1890ff; padding-left: 10px; font-weight: 600;">
+          五、 返回结果示例 (finalresult JSON)</h2>
+        <p>以下是经过多模态大模型判定并由 Python 去重节点结算后输出的 <code style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-family:monospace; color:#0050b3; font-weight:600;">finalresult</code> JSON 示例。该示例覆盖了转发图验证通过、有效评论去重防伪、作弊重复图拦截等多重场景：</p>
+        <pre style="background: #f5f5f5; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; border: 1px solid #e8e8e8; line-height: 1.5; font-family: 'Courier New', Courier, monospace;"><code class="language-json">{
+  "task_passed": true,
+  "forwarding_passed": true,
+  "comments_passed_count": 2,
+  "required_comments": 2,
+  "final_valid_count": 2,
+  "message": "转发已通过；评论去重通过 2 张 (达标)",
+  "detailed_results": [
+    {
+      "index": "0",
+      "imageurl": "https://example.com/moment.jpg",
+      "imagename": "朋友圈截图.jpg",
+      "category": "moments",
+      "is_wechat_moment": true,
+      "match": true,
+      "moments_list": [
+        {
+          "name_match_status": "MATCHED",
+          "user_nickname_extracted": "张三",
+          "text_match": true,
+          "text": "东风日产大卖！",
+          "publisher_nickname": "东风日产"
+        }
+      ],
+      "status": "passed",
+      "reason": "有效的微信朋友圈截图"
+    },
+    {
+      "index": "1",
+      "imageurl": "https://example.com/live1.jpg",
+      "imagename": "直播间截图1.jpg",
+      "category": "live_stream",
+      "is_live_stream": true,
+      "match": true,
+      "name_match_status": "MATCHED",
+      "livename_match_status": "MATCHED",
+      "user_comment": "主播好美啊",
+      "fingerprint_time": "14:20",
+      "fingerprint_comments": "李四:支持|王五:大气",
+      "fingerprint_visual": "左侧飘窗",
+      "debug_info": "首张有效图，作为防伪基准",
+      "is_duplicate": false,
+      "status": "passed",
+      "reason": "首张有效图"
+    },
+    {
+      "index": "2",
+      "imageurl": "https://example.com/live2.jpg",
+      "imagename": "直播间截图2_连拍.jpg",
+      "category": "live_stream",
+      "is_live_stream": true,
+      "match": true,
+      "name_match_status": "MATCHED",
+      "livename_match_status": "MATCHED",
+      "user_comment": "再发一条",
+      "fingerprint_time": "14:20",
+      "fingerprint_comments": "李四:支持|王五:大气",
+      "fingerprint_visual": "左侧飘窗",
+      "debug_info": "命中去重(与前图) - 时差:0m, 评论相似:1.00, 画面相似:1.00",
+      "is_duplicate": true,
+      "status": "failed",
+      "reason": "与前置通过的图片极度相似，判定为作弊重复图"
+    },
+    {
+      "index": "3",
+      "imageurl": "https://example.com/live3.jpg",
+      "imagename": "直播间截图3.jpg",
+      "category": "live_stream",
+      "is_live_stream": true,
+      "match": true,
+      "name_match_status": "MATCHED",
+      "livename_match_status": "MATCHED",
+      "user_comment": "换个姿势截图",
+      "fingerprint_time": "14:25",
+      "fingerprint_comments": "赵六:价格多少|测试:冲冲冲",
+      "fingerprint_visual": "右侧飘窗",
+      "debug_info": "未命中去重(参考前图) - 时差:5m, 评论相似:0.12, 画面相似:0.35",
+      "is_duplicate": false,
+      "status": "passed",
+      "reason": "去重通过"
+    }
+  ]
+}</code></pre>
+
+      </div>
+
+      <!-- Tab 3: New Interactive Comments AI Audit Guide Doc -->
+      <div id="main_tab_guide_new"
+        style="display: none; padding: 32px 40px; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); font-size: 14px; line-height: 1.75; color: #333; overflow-y: auto;">
+
+        <div style="margin-bottom: 20px;">
+          <button onclick="switchMainTab('audit')"
+            style="cursor: pointer; background: #fff; border: 1px solid #d9d9d9; padding: 6px 16px; border-radius: 4px; color: #666; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;"
+            onmouseover="this.style.color='#1890ff'; this.style.borderColor='#1890ff';"
+            onmouseout="this.style.color='#666'; this.style.borderColor='#d9d9d9';">
+            <svg viewBox="64 64 896 896" focusable="false" width="1em" height="1em" fill="currentColor"
+              aria-hidden="true">
+              <path
+                d="M872 474H286.9l309.1-309.1c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.4-33.9 0L206 487.1c-12.5 12.5-12.5 32.8 0 45.3l356.1 356.1c9.4 9.4 24.6 9.4 33.9 0 9.4-9.4 9.4-24.6 0-33.9L286.9 550H872c13.3 0 24-10.7 24-24s-10.7-26-24-26z">
+              </path>
+            </svg>
+            返回审核列表
+          </button>
+        </div>
+
+        <div
+          style="border-bottom: 2px solid #52c41a; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <h1 style="font-size: 24px; color: #000; margin: 0; font-weight: 600;">互动评论检测工作流 - 接入开发指南</h1>
+            <div style="font-size: 13px; color: #666; margin-top: 6px;">全平台点赞/转发/评论合规校验</div>
+          </div>
+          <span class="badge badge-success"
+            style="font-size: 13px; padding: 4px 12px; background:#f6ffed; border:1px solid #b7eb8f; color:#389e0d;">v3.0
+            统一接口规范</span>
+        </div>
+
+        <p
+          style="background: #fbfbfb; padding: 12px 16px; border-left: 4px solid #52c41a; border-radius: 0 4px 4px 0; margin-bottom: 24px;">
+          本指南用于说明“互动评论检测工作流”在不同业务场景下的调用方式、入参规范及返回数据结构。工作流的最终输出为一个 JSON 格式的字符串，通常包裹在 <code
+            style="background:#e6f7ff; padding:2px 6px; border-radius:4px; font-family:monospace; color:#0050b3; font-weight:600;">answer</code>
+          字段内。外部系统在接收到返回值后，需要对 answer 字段进行 JSON 反序列化解析。
+        </p>
+
+        <!-- Sub Tabs Menu -->
+        <div id="guide_new_subtabs_container"
+          style="display: flex; gap: 12px; margin-bottom: 24px; border-bottom: 1px solid #e8e8e8; padding-bottom: 12px;">
+          <div class="sub-tab-btn active" onclick="switchGuideNewSubTab('dzxh', this)"
+            style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; transition: all 0.2s;">
+            1. 点赞+喜欢 (dzxh)</div>
+          <div class="sub-tab-btn" onclick="switchGuideNewSubTab('dzxhfw', this)"
+            style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; color: #666; border: 1px solid transparent; transition: all 0.2s;">
+            2. 点赞+喜欢+转发 (dzxhfw)</div>
+          <div class="sub-tab-btn" onclick="switchGuideNewSubTab('dzpl', this)"
+            style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; color: #666; border: 1px solid transparent; transition: all 0.2s;">
+            3. 点赞特定评论 (dzpl)</div>
+          <div class="sub-tab-btn" onclick="switchGuideNewSubTab('pinglun', this)"
+            style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; color: #666; border: 1px solid transparent; transition: all 0.2s;">
+            4. 评论内容审核 (pinglun)</div>
+          <div class="sub-tab-btn" onclick="switchGuideNewSubTab('mapping', this)"
+            style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; color: #666; border: 1px solid transparent; transition: all 0.2s;">
+            平台映射关系表</div>
+        </div>
+
+        <!-- Contents -->
+
+        <!-- 1. dzxh -->
+        <div id="guide_new_sub_dzxh" class="guide-new-sub-content" style="display: block; animation: fadeIn 0.3s;">
+          <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">验证场景：点赞 +
+            喜欢（公众号/视频号）</h3>
+          <p style="color:#666; margin-bottom: 16px;">验证用户是否在截图内完成了“点赞”与“喜欢/在看”的双重操作。</p>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th>参数名</th>
+              <th>值</th>
+              <th>说明</th>
+            </tr>
+            <tr>
+              <td><code>input_type</code></td>
+              <td><code>"screenshot"</code></td>
+              <td>固定传截图类型</td>
+            </tr>
+            <tr>
+              <td><code>checktype</code></td>
+              <td><code>"dzxh"</code></td>
+              <td>动作类型标识</td>
+            </tr>
+            <tr>
+              <td><code>img</code></td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
+            </tr>
+          </table>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">返回字段说明 (JSON Array 中的 Object)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th style="width:180px;">字段名</th>
+              <th style="width:120px;">类型</th>
+              <th>业务说明与判定准则</th>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">index</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图索引序号（自 "0" 开始）</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">imageurl</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图公网可访问的直链地址</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">imagename</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>上传截图的文件名</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">category</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>图片视觉核验类别，正常为 <code>like_action</code>，若识别不到对应场景特征则为 <code>invalid</code></td>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">liked_by_user</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>是否已点赞。识别截图中的点赞图标是否呈高亮状态。</td>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">favorited_by_user</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>是否已点击喜欢/在看。识别截图中的心形/星形图标是否高亮。</td>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">publisher_nickname</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>发布者账号名称。用于后续交叉验证发帖人身份。</td>
+            </tr>
+          </table>
+          <pre
+            style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
+// 有点赞，有喜欢
+// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+[
+  {
+    "index": "0",
+    "imageurl": "https://example.com/a.jpg",
+    "imagename": "公众号点赞+爱心截图.jpg",
+    "category": "like_action",
+    "liked_by_user": true,
+    "favorited_by_user": true,
+    "publisher_nickname": "东风日产"
+  }
+]
+
+// 有点赞，无喜欢
+[
+  {
+    "index": "0",
+    "imageurl": "https://example.com/b.jpg",
+    "imagename": "公众号点赞截图.jpg",
+    "category": "like_action",
+    "liked_by_user": true,
+    "favorited_by_user": false,
+    "publisher_nickname": "东风日产"
+  }
+]
+
+// 图片不符合规范(invalid)
+[
+  {
+    "index": "0",
+    "imageurl": "https://example.com/c.jpg",
+    "imagename": "无关截图.jpg",
+    "category": "invalid",
+    "liked_by_user": null,
+    "favorited_by_user": null,
+    "publisher_nickname": ""
+  }
+]
+</pre>
+        </div>
+
+        <!-- 2. dzxhfw -->
+        <div id="guide_new_sub_dzxhfw" class="guide-new-sub-content" style="display: none; animation: fadeIn 0.3s;">
+          <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">验证场景：点赞 + 喜欢 +
+            转发（公众号/视频号）</h3>
+          <p style="color:#666; margin-bottom: 16px;">验证用户点赞、喜欢，并将其转发到了朋友圈，同时可校验朋友圈配文和发布者身份。多图场景下会自动进行图片间的账号交叉比对。</p>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th>参数名</th>
+              <th>值</th>
+              <th>说明</th>
+            </tr>
+            <tr>
+              <td><code>input_type</code></td>
+              <td><code>"screenshot"</code></td>
+              <td>固定传截图类型</td>
+            </tr>
+            <tr>
+              <td><code>checktype</code></td>
+              <td><code>"dzxhfw"</code></td>
+              <td>动作类型标识</td>
+            </tr>
+            <tr>
+              <td><code>img</code></td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
+            </tr>
+            <tr>
+              <td><code>user_nickname</code></td>
+              <td>自定义字符串</td>
+              <td>可选，校验转发用户昵称</td>
+            </tr>
+            <tr>
+              <td><code>content</code></td>
+              <td>自定义字符串</td>
+              <td>可选，校验朋友圈配文</td>
+            </tr>
+          </table>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">返回字段说明 (JSON Object)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th style="width:180px;">字段名</th>
+              <th style="width:120px;">类型</th>
+              <th>业务说明与判定准则</th>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">publisher_nickname_same</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>核心业务依据。点赞所属公众号/视频号与转发公众号/视频号是否为同一个。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">like_passed</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>点赞爱心动作达成状态。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">forwarding_passed</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>转发朋友圈动作达成状态。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">name_match_status</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>发帖昵称比对状态枚举：<code>MATCHED</code> / <code>MISMATCHED</code> / <code>NOT_FOUND</code>。</td>
+            </tr>
+
+            <tr style="background:#f9f9f9;">
+              <td colspan="3"><strong style="color:#0050b3;">detailed_results (Array&lt;Object&gt;) 子列表内对象属性：</strong>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">index</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图索引序号。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">imageurl</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图直链。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">imagename</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>上传文件名称。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">category</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>图片视觉核验类别：<code>moments</code>（朋友圈转发）、<code>like_action</code>（点赞在看） 或 <code>invalid</code>（不符合规范）。</td>
+            </tr>
+
+            <tr style="background:#fafafa;">
+              <td colspan="3" style="padding-left: 20px; font-size:12px; color:#555;"><strong>当 category = "moments"
+                  时特有属性：</strong></td>
+            </tr>
+            <tr>
+              <td style="padding-left: 30px;"><code style="font-weight:bold;">is_wechat_moment</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>是否为有效的微信朋友圈截图。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 30px;"><code style="font-weight:bold;">match</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>固定输出 <code>true</code>，作为昵称匹配和兼容性的硬性兜底。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 30px;"><code style="font-weight:bold;">moments_list</code></td>
+              <td><span class="badge badge-neutral">Array&lt;Object&gt;</span></td>
+              <td>朋友圈发布列表记录。每个对象包含属性：<br>
+                - <code>name_match_status</code> (String): 转发人昵称匹配状态。<br>
+                - <code>user_nickname_extracted</code> (String): 提取的发帖人昵称。<br>
+                - <code>text_match</code> (Boolean): 转发配文是否匹配关键字。<br>
+                - <code>text</code> (String): 提取到的朋友圈实际配文内容。<br>
+                - <code>publisher_nickname</code> (String): 被转发公众号/视频号昵称。
+              </td>
+            </tr>
+
+            <tr style="background:#fafafa;">
+              <td colspan="3" style="padding-left: 20px; font-size:12px; color:#555;"><strong>当 category = "like_action"
+                  时特有属性：</strong></td>
+            </tr>
+            <tr>
+              <td style="padding-left: 30px;"><code style="font-weight:bold;">liked_by_user</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>该图用户是否已点赞。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 30px;"><code style="font-weight:bold;">favorited_by_user</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>该图用户是否已喜欢/在看。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 30px;"><code style="font-weight:bold;">publisher_nickname</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>提取出的公众号/视频号发布者名称。</td>
+            </tr>
+          </table>
+          <pre
+            style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
+// 有点赞，有喜欢
+// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+[
+  {
+    "index": "0",
+    "imageurl": "https://example.com/a.jpg",
+    "imagename": "公众号点赞+爱心截图.jpg",
+    "category": "like_action",
+    "liked_by_user": true,
+    "favorited_by_user": true,
+    "publisher_nickname": "东风日产"
+  }
+]
+
+// 有点赞，无喜欢
+[
+  {
+    "index": "0",
+    "imageurl": "https://example.com/b.jpg",
+    "imagename": "公众号点赞截图.jpg",
+    "category": "like_action",
+    "liked_by_user": true,
+    "favorited_by_user": false,
+    "publisher_nickname": "东风日产"
+  }
+]
+
+// 图片不符合规范(invalid)
+[
+  {
+    "index": "0",
+    "imageurl": "https://example.com/c.jpg",
+    "imagename": "无关截图.jpg",
+    "category": "invalid",
+    "liked_by_user": null,
+    "favorited_by_user": null,
+    "publisher_nickname": ""
+  }
+]
+</pre>
+        </div>
+
+        <!-- 3. dzpl -->
+        <div id="guide_new_sub_dzpl" class="guide-new-sub-content" style="display: none; animation: fadeIn 0.3s;">
+          <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">验证场景：点赞帖子的评论
+          </h3>
+          <p style="color:#666; margin-bottom: 16px;">针对评论区的截图，验证用户是否点赞了特定的评论，并提取出被点赞的评论文本及情绪。</p>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th>参数名</th>
+              <th>值</th>
+              <th>说明</th>
+            </tr>
+            <tr>
+              <td><code>input_type</code></td>
+              <td><code>"screenshot"</code></td>
+              <td>固定传截图类型</td>
+            </tr>
+            <tr>
+              <td><code>checktype</code></td>
+              <td><code>"dzpl"</code></td>
+              <td>动作类型标识</td>
+            </tr>
+            <tr>
+              <td><code>img</code></td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
+            </tr>
+          </table>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">返回字段说明 (JSON Array)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th style="width:180px;">字段名</th>
+              <th style="width:120px;">类型</th>
+              <th>业务说明与判定准则</th>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">index</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图索引序号。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">imageurl</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图直链地址。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">imagename</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>图片文件名称。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">category</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>图片视觉核验类别，正常为 <code>like_comment</code>，若识别不到对应场景特征则为 <code>invalid</code></td>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">has_like</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>截图中是否出现了被点赞（图标高亮）的评论。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">is_positive</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>提取出点赞的评论列表情绪是否包含为正向。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">liked_comments</code></td>
+              <td><span class="badge badge-neutral">Array&lt;Object&gt;</span></td>
+              <td>被点赞的评论明细列表。</td>
+            </tr>
+            <tr style="background:#f9f9f9;">
+              <td colspan="3"><strong style="color:#0050b3;">liked_comments 内对象属性：</strong></td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">nickname</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>评论发布者昵称。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">content</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>提取出的评论文本内容。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">is_positive</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>评论情绪是否为正向。</td>
+            </tr>
+          </table>
+          <pre
+            style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
+// 有点赞的评论
+// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+[
+  {
+    "index": "0",
+    "imageurl": "...",
+    "imagename": "...png",
+    "category": "like_comment",
+    "has_like": true,
+    "is_positive": true,
+    "liked_comments": [
+      {
+        "nickname": "Aurélie",
+        "content": "聚是一团火...",
+        "is_positive": true
+      }
+    ]
+  }
+]
+
+// 无点赞的评论
+[
+  {
+    "index": "0",
+    "imageurl": "...",
+    "imagename": "...png",
+    "category": "like_comment",
+    "has_like": false,
+    "is_positive": false,
+    "liked_comments": []
+  }
+]
+
+// 图片不符合规范(invalid)
+[
+  {
+    "index": "0",
+    "imageurl": "...",
+    "imagename": "无关截图.jpg",
+    "category": "invalid",
+    "has_like": null,
+    "is_positive": null,
+    "liked_comments": []
+  }
+]
+</pre>
+        </div>
+
+        <!-- 4. pinglun -->
+        <div id="guide_new_sub_pinglun" class="guide-new-sub-content" style="display: none; animation: fadeIn 0.3s;">
+          <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">验证场景：评论内容审核
+            (支持截图与纯文本)</h3>
+          <p style="color:#666; margin-bottom: 16px;">验证用户的评论文本是否达标（包含特定文案、字数达标、情绪等），支持“截图视觉提取”与“纯文本直传”两种模式。</p>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参 (截图模式)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th>参数名</th>
+              <th>值</th>
+              <th>说明</th>
+            </tr>
+            <tr>
+              <td><code>input_type</code></td>
+              <td><code>"screenshot"</code></td>
+              <td>截图模式</td>
+            </tr>
+            <tr>
+              <td><code>checktype</code></td>
+              <td><code>"pinglun"</code></td>
+              <td>动作类型标识</td>
+            </tr>
+            <tr>
+              <td><code>img</code></td>
+              <td><code>Array&lt;Img&gt;</code></td>
+              <td>必填，图片上传文件列表</td>
+            </tr>
+            <tr>
+              <td><code>num</code></td>
+              <td>Integer</td>
+              <td>可选，最少字数要求</td>
+            </tr>
+            <tr>
+              <td><code>content</code></td>
+              <td>String</td>
+              <td>可选，必须包含的文本关键词</td>
+            </tr>
+            <tr>
+              <td><code>user_nickname</code></td>
+              <td>String</td>
+              <td>可选，在截图中寻址特定的用户昵称</td>
+            </tr>
+          </table>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参 (纯文本模式)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th>参数名</th>
+              <th>值</th>
+              <th>说明</th>
+            </tr>
+            <tr>
+              <td><code>input_type</code></td>
+              <td><code>"text"</code></td>
+              <td>纯文本模式</td>
+            </tr>
+            <tr>
+              <td><code>comment</code></td>
+              <td>String</td>
+              <td>必填，待分析的纯文本内容</td>
+            </tr>
+            <tr>
+              <td><code>num</code> / <code>content</code></td>
+              <td>同上</td>
+              <td>同上，进行字数和关键词校验</td>
+            </tr>
+          </table>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">返回字段说明 (截图模式 - JSON Array)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th style="width:180px;">字段名</th>
+              <th style="width:120px;">类型</th>
+              <th>业务说明与判定准则</th>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">index</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图索引序号。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">imageurl</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>截图直链。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">imagename</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>文件名称。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">category</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>图片视觉核验类别，正常为 <code>comment</code>，若识别不到对应场景特征则为 <code>invalid</code></td>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">match</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>是否找到了匹配用户昵称的评论。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">content_match</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>提取出的评论是否包含业务指定的要求关键词。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">is_positive</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>提取出的评论情绪是否为正向。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">word_count_gt_num</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>提取出的评论字数是否大于等于业务要求的字数门槛。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">word_count</code></td>
+              <td><span class="badge badge-neutral">Integer</span></td>
+              <td>提取的评论列表字数最大长度。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">emoji_only</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>提取出的评论是否仅包含表情符号。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">name_match_status</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>名字匹配状态枚举：<code>MATCHED</code> / <code>MISMATCHED</code> / <code>NOT_FOUND</code>。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">user_comments</code></td>
+              <td><span class="badge badge-neutral">Array&lt;Object&gt;</span></td>
+              <td>提取到的所有用户评论及解析明细数组。</td>
+            </tr>
+            <tr style="background:#f9f9f9;">
+              <td colspan="3"><strong style="color:#0050b3;">user_comments 内对象属性：</strong></td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">content</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>评论文本具体内容。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">emoji_only</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>是否仅包含表情符号。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">content_match</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>该条评论是否包含指定的关键词。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">is_positive</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>该条评论情绪是否为正向。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">word_count</code></td>
+              <td><span class="badge badge-neutral">Integer</span></td>
+              <td>评论字数。</td>
+            </tr>
+            <tr>
+              <td style="padding-left: 20px;"><code style="font-weight:bold;">word_count_gt_num</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>字数是否达标。</td>
+            </tr>
+          </table>
+
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">返回字段说明 (纯文本模式 - JSON Object)</h4>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;">
+              <th style="width:180px;">字段名</th>
+              <th style="width:120px;">类型</th>
+              <th>业务说明与判定准则</th>
+            </tr>
+            <tr>
+              <td><code style="color:#1890ff; font-weight:bold;">match</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>整体匹配状态，固定为 <code>true</code>。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">content</code></td>
+              <td><span class="badge badge-neutral">String</span></td>
+              <td>评论文本具体内容。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">emoji_only</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>是否仅包含表情符号、标点或空格。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">content_match</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>该条评论是否包含指定的关键词。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">is_positive</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>该条评论情绪是否为正向。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">word_count</code></td>
+              <td><span class="badge badge-neutral">Integer</span></td>
+              <td>评论字数（去除空格与换行）。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">word_count_gt_num</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td>评论字数是否大于等于字数门槛。</td>
+            </tr>
+          </table>
+
+          <pre
+            style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
+// 截图模式成功
+// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+[
+  {
+    "index": "0",
+    "imageurl": "...",
+    "imagename": "...png",
+    "category": "comment",
+    "match": true,
+    "name_match_status": "MATCHED",
+    "content_match": true,
+    "is_positive": true,
+    "word_count_gt_num": true,
+    "word_count": 17,
+    "emoji_only": false,
+    "user_comments": [
+      {
+        "content": "给爱心人士👍...",
+        "emoji_only": false,
+        "content_match": true,
+        "is_positive": true,
+        "word_count": 17,
+        "word_count_gt_num": true
+      }
+    ]
+  }
+]
+
+// 截图不符合规范(invalid)
+[
+  {
+    "index": "0",
+    "imageurl": "...",
+    "imagename": "无关截图.jpg",
+    "category": "invalid",
+    "match": false,
+    "name_match_status": "",
+    "content_match": null,
+    "is_positive": null,
+    "word_count_gt_num": null,
+    "word_count": null,
+    "emoji_only": null,
+    "user_comments": []
+  }
+]
+
+// 纯文本模式成功 (平铺直出)
+{
+  "match": true,
+  "content": "东风日产的NX8大气时尚！",
+  "emoji_only": false,
+  "content_match": true,
+  "is_positive": true,
+  "word_count": 13,
+  "word_count_gt_num": true
+}
+</pre>
+        </div>
+
+        <!-- 5. Mapping -->
+        <div id="guide_new_sub_mapping" class="guide-new-sub-content" style="display: none; animation: fadeIn 0.3s;">
+          <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">系统对接参考：平台映射关系表
+          </h3>
+          <p style="color:#666; margin-bottom: 16px;">外部系统在对接时，可根据业务端选择的 作业平台 与 作业类型，动态映射到本工作流的具体审核类型 (checktype)。</p>
+
+          <table class="data-table" style="width: 100%; margin-bottom: 16px; font-size: 13px; line-height: 1.6;">
+            <thead style="background:#fafafa;">
+              <tr>
+                <th>作业平台</th>
+                <th>作业小类型 (前端显示)</th>
+                <th>对应 checktype</th>
+                <th>描述与逻辑</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>微信视频号、微信公众号</td>
+                <td>点赞帖子（图片）</td>
+                <td><code>dzxh</code> 或 <code>dzxhfw</code></td>
+                <td>根据业务配置是否勾选“转发朋友圈”决定。无转发传dzxh，有转发传dzxhfw。</td>
+              </tr>
+              <tr>
+                <td>微信视频号、微信公众号</td>
+                <td>点赞帖子评论类（图片）</td>
+                <td><code>dzpl</code></td>
+                <td>针对推文或视频下方特定评论的点赞截图审核。</td>
+              </tr>
+              <tr>
+                <td>微信视频号、微信公众号</td>
+                <td>评论（文本或图片）</td>
+                <td><code>pinglun</code></td>
+                <td>纯评论文本或评论截图内容合规、字数检测审核。</td>
+              </tr>
+              <tr>
+                <td>知乎、小红书、B站等其他平台</td>
+                <td>点赞帖子评论类（图片）</td>
+                <td><code>dzpl</code></td>
+                <td>针对帖子下方特定评论的点赞截图审核。</td>
+              </tr>
+              <tr>
+                <td>知乎、小红书、B站等其他平台</td>
+                <td>评论（文本或图片）</td>
+                <td><code>pinglun</code></td>
+                <td>纯评论文本或评论截图内容合规、字数检测审核。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1375,13 +2423,17 @@
         <!-- Platform Switch Demo Banner (For PM demonstration) -->
         <div class="platform-switch-bar">
           <span class="platform-title" id="platformTitle">正在审核: 微信视频号互动作业 (转发+评论)</span>
-          <div style="display: flex; align-items: center;">
-            <span style="font-size: 12px; margin-right: 8px; color: var(--text-secondary);">情境切换:</span>
+          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px; width: 100%;">
+            <span style="font-size: 12px; margin-right: 8px; color: var(--text-secondary); flex-shrink: 0;">情境切换:</span>
             <div class="scenario-btn-group">
               <button class="scenario-btn" id="btn_fwcm" onclick="loadScenario('fwcm')">视频号正常 (fwcm)</button>
               <button class="scenario-btn" id="btn_cm" onclick="loadScenario('cm')">抖音纯评论 (cm)</button>
               <button class="scenario-btn" id="btn_fwcm_partial" onclick="loadScenario('fwcm_partial')">视频号部分达标</button>
               <button class="scenario-btn" id="btn_fwcm_fail" onclick="loadScenario('fwcm_fail')">视频号转发失败</button>
+              <button class="scenario-btn" id="btn_dzxh" onclick="loadScenario('dzxh')">点赞帖子 (dzxh)</button>
+              <button class="scenario-btn" id="btn_dzxhfw" onclick="loadScenario('dzxhfw')">点赞+转发 (dzxhfw)</button>
+              <button class="scenario-btn" id="btn_dzpl" onclick="loadScenario('dzpl')">点赞评论 (dzpl)</button>
+              <button class="scenario-btn" id="btn_pinglun" onclick="loadScenario('pinglun')">纯评论 (pinglun)</button>
             </div>
           </div>
         </div>
@@ -1434,14 +2486,17 @@
         <div>
           <div class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
             <span>AI智能审核结果明细</span>
-            <span style="font-size: 11px; font-weight: normal; color: #888; font-family: monospace; display: flex; align-items: center; gap: 4px;">
-              Conversation ID: <span id="conversationIdVal" style="color: #1890ff; font-weight: bold;">a5176eca-5b70-4cea-bbf7-168c4443c286</span>
-              <span class="dev-tip" title="API对接参考&#10;对应字段: conversation_id (String)&#10;说明: 智能体(Agent)底层调用记录的唯一标识，用于全链路调用追踪和申诉定位">?</span>
+            <span
+              style="font-size: 11px; font-weight: normal; color: #888; font-family: monospace; display: flex; align-items: center; gap: 4px;">
+              Conversation ID: <span id="conversationIdVal"
+                style="color: #1890ff; font-weight: bold;">a5176eca-5b70-4cea-bbf7-168c4443c286</span>
+              <span class="dev-tip"
+                title="API对接参考&#10;对应字段: conversation_id (String)&#10;说明: 智能体(Agent)底层调用记录的唯一标识，用于全链路调用追踪和申诉定位">?</span>
             </span>
           </div>
 
           <!-- AI Summary Card -->
-          <div class="ai-summary-card">
+          <div class="ai-summary-card" id="aiSummaryCard">
             <div class="ai-summary-header">
               <div style="display:flex; align-items:center;">
                 <span>AI审核概览</span>
@@ -1452,28 +2507,71 @@
                 style="font-size: 13px; padding: 4px 12px;">审核成功</span>
             </div>
             <div class="ai-summary-grid">
-              <div class="ai-stat-box">
+              <div class="ai-stat-box" id="box_job_type">
                 <div class="ai-stat-label">作业类型 <span class="dev-tip"
-                    title="API对接参考&#10;对应字段: platform (String) & job_type ('fwcm'或'cm')&#10;说明: 区分视频号必须转发或抖音纯评论作业模式">?</span>
+                    title="API对接参考&#10;对应字段: platform (String) & job_type&#10;说明: 区分作业模式">?</span>
                 </div>
                 <div class="ai-stat-val val-neutral" id="aiTypeVal">转发+评论 (fwcm)</div>
               </div>
-              <div class="ai-stat-box">
+              <div class="ai-stat-box" id="box_ai_status">
                 <div class="ai-stat-label">AI审核状态 <span class="dev-tip"
-                    title="API对接参考&#10;对应字段: task_passed (Boolean) & required_comments (Number)&#10;说明: 整单是否通过，以及单据设定的要求评论张数门槛">?</span>
+                    title="API对接参考&#10;对应字段: task_passed (Boolean)&#10;说明: 整单是否通过">?</span>
                 </div>
                 <div class="ai-stat-val val-pass" id="aiStatusBoxVal">审核成功</div>
                 <div style="font-size:11px; color:#888; margin-top:4px;" id="aiReqCount">评论要求张数：2 张</div>
               </div>
-              <div class="ai-stat-box">
+              <div class="ai-stat-box" id="box_fw_status">
                 <div class="ai-stat-label">转发图审核 <span class="dev-tip"
                     title="API对接参考&#10;对应字段: forwarding_passed (Boolean)&#10;说明: 视频号专属前置底线，核验发帖昵称与来源挂件">?</span></div>
                 <div class="ai-stat-val val-pass" id="fwStatusVal">通过</div>
               </div>
-              <div class="ai-stat-box">
-                <div class="ai-stat-label">评论图通过数量 <span class="dev-tip"
-                    title="API对接参考&#10;对应字段: comments_passed_count (Number)&#10;说明: 防伪去重比对后的合规评论截屏总数">?</span></div>
+              <div class="ai-stat-box" id="box_cm_count">
+                <div class="ai-stat-label">合规通过数量 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: comments_passed_count (Number)&#10;说明: 防伪去重比对后的合规截屏总数">?</span></div>
                 <div class="ai-stat-val val-pass" id="cmPassCountVal">通过 (2/2张)</div>
+              </div>
+
+              <!-- dzxh -->
+              <div class="ai-stat-box" id="box_is_liked" style="display:none;">
+                <div class="ai-stat-label">是否已点赞 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: liked_by_user (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="isLikedVal">是</div>
+              </div>
+              <div class="ai-stat-box" id="box_is_favorited" style="display:none;">
+                <div class="ai-stat-label">是否已喜欢 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: favorited_by_user (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="isFavoritedVal">是</div>
+              </div>
+              <div class="ai-stat-box" id="box_like_passed" style="display:none;">
+                <div class="ai-stat-label">是否已点赞+喜欢 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: like_passed (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="likePassedVal">是</div>
+              </div>
+
+              <!-- dzpl -->
+              <div class="ai-stat-box" id="box_comment_liked" style="display:none;">
+                <div class="ai-stat-label">评论已被点赞 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: has_like (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="commentLikedVal">是 (图标高亮)</div>
+              </div>
+
+              <!-- pinglun / dzpl -->
+              <div class="ai-stat-box" id="box_comment_positive" style="display:none;">
+                <div class="ai-stat-label">提取评论情绪 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: is_positive (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="commentPositiveVal">正向</div>
+              </div>
+
+              <!-- pinglun -->
+              <div class="ai-stat-box" id="box_match" style="display:none;">
+                <div class="ai-stat-label">完全匹配规则 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: match (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="matchVal">是</div>
+              </div>
+              <div class="ai-stat-box" id="box_content_match" style="display:none;">
+                <div class="ai-stat-label">包含指定关键词 <span class="dev-tip"
+                    title="API对接参考&#10;对应字段: content_match (Boolean)">?</span></div>
+                <div class="ai-stat-val val-pass" id="contentMatchVal">是</div>
               </div>
             </div>
 
@@ -1486,7 +2584,7 @@
                       title="API对接参考&#10;对应字段: message (String)&#10;说明: 针对多模态精算结果直出的综合结算说明短句">?</span> ：</strong> <span
                     id="aiMessageVal">转发已通过；评论去重通过 2 张 (达标)</span></span>
               </div>
-              <div
+              <div id="aiFinalScoreContainer"
                 style="font-size:14px; font-weight:bold; color:#d46b08; background:#fffbe6; border:1px solid #ffe58f; padding:6px 14px; border-radius:4px; display:flex; align-items:center;">
                 最终得分 <span class="dev-tip"
                   title="API对接参考&#10;对应字段: final_score (Number) 或 按合规图计件累计&#10;说明: 读取作业配置的评论单图得分值汇总">?</span> ：<span
@@ -1499,14 +2597,16 @@
           <table class="data-table" style="margin-top: 12px;">
             <thead>
               <tr class="ai-table-header">
-                <th style="width: 140px; text-align:center;">用户图片 <span class="dev-tip"
+                <th style="width: 140px; text-align:center;">用户图片 <span class="dev-tip" id="tip_user_img"
                     title="API对接参考&#10;对应字段: category&#10;取值: 'moments' 或 'live_stream'">?</span></th>
-                <th style="width: 320px;">AI审核问题 <span class="dev-tip" title="根据业务规则配置的多图核验问询矩阵">?</span></th>
-                <th style="width: 250px;">AI答案 (含原因) <span class="dev-tip"
-                    title="API核心字段: nickname_match_status, name_match_status, user_comment, is_duplicate 等">?</span>
+                <th style="width: 320px;">AI审核问题 <span class="dev-tip" id="tip_ai_q" title="根据业务规则配置的多图核验问询矩阵">?</span>
+                </th>
+                <th style="width: 250px;">AI答案 (含原因) <span class="dev-tip" id="tip_ai_a"
+                    title="API核心字段: name_match_status, livename_match_status, user_comment, is_duplicate 等">?</span>
                 </th>
                 <th style="width: 90px; text-align:center;">设置答案</th>
-                <th>审核详情与证据链说明 <span class="dev-tip" title="API核心字段: reason & debug_info&#10;输出去重防伪时间差与雷同度精确数据">?</span>
+                <th id="th_evidence">审核详情与证据链说明 <span class="dev-tip" id="tip_evidence"
+                    title="API核心字段: reason & debug_info&#10;输出去重防伪时间差与雷同度精确数据">?</span>
                 </th>
               </tr>
             </thead>
@@ -1608,6 +2708,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Dynamic Logic JavaScript -->
   <script>
@@ -1925,22 +3026,216 @@
             thumbnail: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=150&q=80',
             rows: [
               {
-                question: '是否为{东风汽车}直播间',
-                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">账号一致</span>',
-                setAnswer: '是',
-                reason: '账号比对正常。'
-              },
-              {
-                question: '是否有{李雷}直播间评论区评论',
-                aiAnswer: '是 <span style="color:#1890ff; font-weight:500;">(提取: "东风大卖!")</span>',
-                setAnswer: '均可',
-                reason: '提取内容定位成功。'
-              },
-              {
                 question: '是否为真实有效且无重复作弊的截图',
                 aiAnswer: '否 <span class="badge badge-danger" style="margin-left:6px;">重复截图</span> (极度相似 0.99)',
                 setAnswer: '是',
                 reason: '防伪去重拦截：图2与图1视觉内容高度雷同，单图作废。本单共按 1 张有效发分。'
+              }
+            ]
+          }
+        ]
+      },
+
+      // === 互动评论审核场景 (非直播) ===
+      dzxhfw: {
+        platform: '微信公众号',
+        taskName: '公众号推文点赞转发朋友圈任务演示',
+        userId: '1988273910283749205',
+        userNick: '王大拿',
+        mainStatus: '基础审核成功',
+        conversationId: 'dzxhfw-xxx-xxx',
+        materials: [
+          { type: '朋友圈转发图', url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80' },
+          { type: '点赞喜爱图', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=80' }
+        ],
+        aiSummary: {
+          typeLabel: '点赞+转发 (dzxhfw)',
+          resultBadge: '审核成功',
+          statusText: '审核成功',
+          likePassed: true,
+          fwStatus: '通过',
+          suggestedScore: 15,
+          message: '已识别到点赞及喜欢标识，且截图包含朋友圈转发记录。'
+        },
+        aiDetails: [
+          {
+            category: '朋友圈转发图',
+            thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=150&q=80',
+            rows: [
+              {
+                question: '提交作业截图，是否为朋友圈：is_wechat_moment',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True</span>',
+                setAnswer: '是',
+                reason: '截图视觉特征符合微信朋友圈时间流。'
+              },
+              {
+                question: '发布朋友圈内容的用户是否为王大拿：(匹配状态：name_match_status，可选值 MATCHED / MISMATCHED / NOT_FOUND)',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">MATCHED (姓名匹配一致)</span>',
+                setAnswer: '是',
+                reason: '发帖人昵称提取与指定用户“王大拿”比对成功，属于 MATCHED 状态。'
+              },
+              {
+                question: '朋友圈内容是否存在下面这段文案“东风大卖!”：text_match',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True (文案一致)</span>',
+                setAnswer: '是',
+                reason: '识别出转发内容中包含业务所设关键字。'
+              }
+            ]
+          },
+          {
+            category: '点赞喜爱图',
+            thumbnail: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80',
+            rows: [
+              {
+                question: '是否已点赞',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True</span>',
+                setAnswer: '原配置',
+                reason: '提取到点赞高亮标志。'
+              },
+              {
+                question: '是否点亮在看/喜欢',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True</span>',
+                setAnswer: '原配置',
+                reason: '已识别到喜欢标志。'
+              }
+            ]
+          }
+        ]
+      },
+      dzxh: {
+        platform: '微信公众号',
+        taskName: '公众号推文点赞任务演示',
+        userId: '1988273910283749205',
+        userNick: '王大拿',
+        mainStatus: '基础审核成功',
+        conversationId: 'dzxh-xxx-xxx',
+        materials: [
+          { type: '点赞截图', url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80' }
+        ],
+        aiSummary: {
+          typeLabel: '点赞帖子 (dzxh)',
+          resultBadge: '审核成功',
+          statusText: '审核成功',
+          isLiked: true,
+          isFavorited: true,
+          suggestedScore: 10,
+          message: '用户已成功点赞并点亮"喜欢"标识。'
+        },
+        aiDetails: [
+          {
+            category: '点赞截图 #1',
+            thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=150&q=80',
+            rows: [
+              {
+                question: '是否已点赞',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True</span>',
+                setAnswer: '是',
+                reason: '提取到点赞高亮标志。'
+              },
+              {
+                question: '是否点亮在看/喜欢',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True</span>',
+                setAnswer: '是',
+                reason: '已识别到喜欢标志。'
+              }
+            ]
+          }
+        ]
+      },
+      dzpl: {
+        platform: '小红书',
+        taskName: '小红书点赞评论任务演示',
+        userId: '1988273910283749206',
+        userNick: '赵小花',
+        mainStatus: '基础审核成功',
+        conversationId: 'dzpl-xxx-xxx',
+        materials: [
+          { type: '点赞评论截图', url: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1000&q=80' }
+        ],
+        aiSummary: {
+          typeLabel: '点赞特定评论 (dzpl)',
+          resultBadge: '审核成功',
+          statusText: '审核成功',
+          commentLiked: true,
+          isPositive: true,
+          suggestedScore: 15,
+          message: '已检测到被点赞（高亮）的评论，且评论内容为正向表达。'
+        },
+        aiDetails: [
+          {
+            category: '点赞评论截图 #1',
+            thumbnail: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80',
+            rows: [
+              {
+                question: '是否点赞',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">True</span>',
+                setAnswer: '是',
+                reason: '左下角点赞按钮亮起。'
+              },
+              {
+                question: '识别出的评论内容',
+                aiAnswer: '很棒的分享，支持一下！ <span class="badge badge-success" style="margin-left:6px;">正向内容</span>',
+                setAnswer: '符合要求',
+                reason: '精准抓取了目标用户发表的评论内容。'
+              }
+            ]
+          }
+        ]
+      },
+      pinglun: {
+        platform: 'B站',
+        taskName: 'B站纯评论文本任务演示',
+        userId: '1988273910283749207',
+        userNick: '张三',
+        mainStatus: '基础审核成功',
+        conversationId: 'pinglun-xxx-xxx',
+        materials: [
+          { type: '评论文本内容', url: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=300&q=80', original: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1000&q=80' }
+        ],
+        aiSummary: {
+          typeLabel: '评论内容审核 (pinglun)',
+          resultBadge: '审核成功',
+          statusText: '审核成功',
+          match: true,
+          contentMatch: true,
+          isPositive: true,
+          suggestedScore: 5,
+          message: '评论完全匹配规则，包含业务指定关键词，情绪判定为正向。'
+        },
+        aiDetails: [
+          {
+            category: '评论文本内容 #1',
+            thumbnail: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=150&q=80',
+            rows: [
+              {
+                question: '是否存在“张三”的评论 (match)',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">name_match_status: MATCHED</span>',
+                setAnswer: '是',
+                reason: '成功在评论区定位到目标用户“张三”发表的言论。'
+              },
+              {
+                question: '评论是否仅有表情 (emoji_only)',
+                aiAnswer: '否 <span class="badge badge-success" style="margin-left:6px;">emoji_only: false</span>',
+                setAnswer: '否',
+                reason: '检测到实质文字内容，非纯符号或纯表情。'
+              },
+              {
+                question: '评论字数是否大于等于10个字 (word_count_gt_num)',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">word_count_gt_num: true</span>',
+                setAnswer: '是',
+                reason: '实际提取字数为 13 字，大于配置的最小限制 (10字)。'
+              },
+              {
+                question: '评论是否存在指定内容“东风日产” (content_match)',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">content_match: true</span>',
+                setAnswer: '是',
+                reason: '提取到指定要求关键词“东风日产”。'
+              },
+              {
+                question: '评论是否为正面/积极评论 (is_positive)',
+                aiAnswer: '是 <span class="badge badge-success" style="margin-left:6px;">is_positive: true</span>',
+                setAnswer: '是',
+                reason: '语义情绪核验为正向情感。'
               }
             ]
           }
@@ -2012,10 +3307,21 @@
       }
 
       // Update Basic Infos
-      document.getElementById('platformTitle').textContent = `正在审核: ${data.platform}互动作业 (${key.includes('fwcm') ? '转发+评论' : '仅评论'})`;
+      const typeLabels = { fwcm: '转发+评论', cm: '仅评论', fwcm_partial: '转发+评论', fwcm_fail: '转发+评论', dzxh: '点赞+喜欢', dzxhfw: '点赞+喜欢+转发', dzpl: '点赞特定评论', pinglun: '评论内容审核' };
+      document.getElementById('platformTitle').textContent = `正在审核: ${data.platform}互动作业 (${typeLabels[key] || key})`;
       document.getElementById('taskName').textContent = data.taskName;
       document.getElementById('userId').textContent = data.userId;
       document.getElementById('userNick').textContent = data.userNick;
+
+      // 控制 AI审核概览卡片 (aiSummaryCard) 的展示与隐藏 (pinglun 场景隐藏)
+      const summaryCard = document.getElementById('aiSummaryCard');
+      if (summaryCard) {
+        if (key === 'pinglun') {
+          summaryCard.style.display = 'none';
+        } else {
+          summaryCard.style.display = 'block';
+        }
+      }
 
       const mainStBadge = document.getElementById('mainStatusBadge');
       mainStBadge.textContent = data.mainStatus;
@@ -2043,6 +3349,52 @@
 
       // Update AI Summary Card
       const summary = data.aiSummary;
+      const isNewType = ['dzxh', 'dzxhfw', 'dzpl', 'pinglun'].includes(key);
+
+      // 动态更新明细表格头提示及列的展示/隐藏
+      const tipUserImg = document.getElementById('tip_user_img');
+      const tipAiQ = document.getElementById('tip_ai_q');
+      const tipAiA = document.getElementById('tip_ai_a');
+      const thEvidence = document.getElementById('th_evidence');
+
+      if (isNewType) {
+        if (tipUserImg) {
+          tipUserImg.setAttribute('title', 'API对接参考\n对应入参: img\n说明: 用户提交的核验截图列表（单图或多图，通过 input_type="screenshot" 传入）');
+        }
+        if (tipAiQ) {
+          tipAiQ.setAttribute('title', '工作流根据审核动作类型 (checktype) 自动触发的标准化核验维度');
+        }
+        if (tipAiA) {
+          let aTipText = '';
+          if (key === 'dzxh') {
+            aTipText = 'API对接参考\n对应字段 (JSON Array 中的 Object)：\n- liked_by_user (Bool): 是否已点赞\n- favorited_by_user (Bool): 是否已喜欢/在看\n- publisher_nickname (String): 提取的发布者账号';
+          } else if (key === 'dzxhfw') {
+            aTipText = 'API对接参考\n对应字段 (JSON Object)：\n- publisher_nickname_same (Bool): 点赞所属公众号/视频号与转发公众号/视频号是否为同一个\n- forwarding_passed (Bool): 是否已转发朋友圈\n- like_passed (Bool): 是否已点赞爱心\n- name_match_status (String): 姓名比对状态';
+          } else if (key === 'dzpl') {
+            aTipText = 'API对接参考\n对应字段 (JSON Array 中的 Object)：\n- has_like (Bool): 评论区中是否有点赞高亮评论\n- liked_comments (Array): 被点赞评论详情列表 (包含 nickname, content, is_positive)';
+          } else if (key === 'pinglun') {
+            aTipText = 'API对接参考\n对应字段 (JSON Array/Object)：\n- match (Bool): 是否找到了匹配规则的评论\n- content_match (Bool): 评论是否包含关键词\n- is_positive (Bool): 情绪是否正向\n- word_count_gt_num (Bool): 字数是否达标\n- name_match_status (String): 昵称匹配状态';
+          }
+          tipAiA.setAttribute('title', aTipText);
+        }
+        if (thEvidence) {
+          thEvidence.style.display = 'none';
+        }
+      } else {
+        if (tipUserImg) {
+          tipUserImg.setAttribute('title', 'API对接参考\n对应字段: category\n取值: \'moments\'(朋友圈转发图) 或 \'live_stream\'(直播间评论图)');
+        }
+        if (tipAiQ) {
+          tipAiQ.setAttribute('title', '根据业务规则配置的多图核验问询矩阵');
+        }
+        if (tipAiA) {
+          tipAiA.setAttribute('title', 'API核心字段: name_match_status, livename_match_status, user_comment, is_duplicate 等');
+        }
+        if (thEvidence) {
+          thEvidence.style.display = '';
+        }
+      }
+
       const resultBadge = document.getElementById('aiResultBadge');
       resultBadge.textContent = summary.resultBadge;
       if (summary.resultBadge.includes('失败')) {
@@ -2057,45 +3409,82 @@
 
       const stBoxVal = document.getElementById('aiStatusBoxVal');
       stBoxVal.textContent = summary.statusText;
-      if (summary.statusText.includes('失败')) {
-        stBoxVal.className = 'ai-stat-val val-fail';
+      stBoxVal.className = summary.statusText.includes('失败') ? 'ai-stat-val val-fail' : 'ai-stat-val val-pass';
+
+      // Hide/Show the dynamic summary boxes
+      const allBoxIds = ['box_job_type', 'box_ai_status', 'box_fw_status', 'box_cm_count', 'box_is_liked', 'box_is_favorited', 'box_like_passed', 'box_comment_liked', 'box_comment_positive', 'box_match', 'box_content_match'];
+      allBoxIds.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+
+      const showBoxes = (ids) => ids.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'block'; });
+      const setVal = (id, condition, t, f) => { const el = document.getElementById(id); if (!el) return; el.textContent = condition ? t : f; el.className = condition ? 'ai-stat-val val-pass' : 'ai-stat-val val-fail'; };
+
+      if (key === 'dzxh') {
+        showBoxes(['box_job_type', 'box_is_liked', 'box_is_favorited']);
+        document.getElementById('aiReqCount').textContent = '';
+        setVal('isLikedVal', summary.isLiked !== false, '是', '否');
+        setVal('isFavoritedVal', summary.isFavorited !== false, '是', '否');
+      } else if (key === 'dzxhfw') {
+        showBoxes(['box_job_type', 'box_ai_status', 'box_like_passed', 'box_fw_status']);
+        document.getElementById('aiReqCount').textContent = '';
+        setVal('likePassedVal', summary.likePassed !== false, '是', '否');
+        const fwV = document.getElementById('fwStatusVal');
+        if (fwV) { fwV.textContent = summary.fwStatus || '通过'; fwV.className = (summary.fwStatus === '未通过') ? 'ai-stat-val val-fail' : 'ai-stat-val val-pass'; }
+      } else if (key === 'dzpl') {
+        showBoxes(['box_job_type', 'box_ai_status', 'box_comment_liked', 'box_comment_positive']);
+        document.getElementById('aiReqCount').textContent = '';
+        setVal('commentLikedVal', summary.commentLiked !== false, '是 (图标高亮)', '否');
+        setVal('commentPositiveVal', summary.isPositive !== false, '正向', '负向/中性');
+      } else if (key === 'pinglun') {
+        showBoxes(['box_job_type', 'box_ai_status', 'box_match', 'box_content_match', 'box_comment_positive']);
+        document.getElementById('aiReqCount').textContent = '';
+        setVal('matchVal', summary.match !== false, '是', '否');
+        setVal('contentMatchVal', summary.contentMatch !== false, '是', '否');
+        setVal('commentPositiveVal', summary.isPositive !== false, '正向', '负向/中性');
       } else {
-        stBoxVal.className = 'ai-stat-val val-pass';
+        // Original livestream scenarios: fwcm, cm, fwcm_partial, fwcm_fail
+        showBoxes(['box_job_type', 'box_ai_status', 'box_fw_status', 'box_cm_count']);
+        document.getElementById('aiReqCount').textContent = `评论要求张数：${summary.reqCount || 1} 张`;
+        const fwV = document.getElementById('fwStatusVal');
+        if (fwV) {
+          fwV.textContent = summary.fwStatus || '--';
+          if (summary.fwStatus === '通过') fwV.className = 'ai-stat-val val-pass';
+          else if (summary.fwStatus === '未通过') fwV.className = 'ai-stat-val val-fail';
+          else fwV.className = 'ai-stat-val val-neutral';
+        }
+        const cmV = document.getElementById('cmPassCountVal');
+        if (cmV) {
+          cmV.textContent = summary.cmPassCount || '--';
+          if (summary.cmPassCount && summary.cmPassCount.includes('未通过')) cmV.className = 'ai-stat-val val-fail';
+          else if (summary.cmPassCount && summary.cmPassCount.includes('部分')) cmV.className = 'ai-stat-val val-neutral';
+          else cmV.className = 'ai-stat-val val-pass';
+        }
       }
 
-      document.getElementById('aiReqCount').textContent = `评论要求张数：${summary.reqCount} 张`;
-
-      const fwVal = document.getElementById('fwStatusVal');
-      fwVal.textContent = summary.fwStatus;
-      if (summary.fwStatus === '通过') {
-        fwVal.className = 'ai-stat-val val-pass';
-      } else if (summary.fwStatus === '未通过') {
-        fwVal.className = 'ai-stat-val val-fail';
-      } else {
-        fwVal.className = 'ai-stat-val val-neutral';
-      }
-
-      const cmVal = document.getElementById('cmPassCountVal');
-      cmVal.textContent = summary.cmPassCount;
-      if (summary.cmPassCount.includes('未通过')) {
-        cmVal.className = 'ai-stat-val val-fail';
-      } else if (summary.cmPassCount.includes('部分')) {
-        cmVal.className = 'ai-stat-val val-neutral';
-      } else {
-        cmVal.className = 'ai-stat-val val-pass';
-      }
-
+      // Settlement message & score - shared across all scenarios
       const warnBox = document.getElementById('oneVoteWarning');
-      warnBox.style.display = 'flex';
-      if (summary.statusText.includes('失败')) {
-        warnBox.className = 'one-vote-warning alert-danger';
-      } else if (summary.resultBadge.includes('部分')) {
-        warnBox.className = 'one-vote-warning alert-neutral';
+      if (key === 'dzxh' || key === 'pinglun') {
+        warnBox.style.display = 'none';
       } else {
-        warnBox.className = 'one-vote-warning alert-success';
+        warnBox.style.display = 'flex';
+        if (summary.statusText.includes('失败')) {
+          warnBox.className = 'one-vote-warning alert-danger';
+        } else if (summary.resultBadge.includes('部分')) {
+          warnBox.className = 'one-vote-warning alert-neutral';
+        } else {
+          warnBox.className = 'one-vote-warning alert-success';
+        }
+        document.getElementById('aiMessageVal').textContent = summary.message || '';
       }
-      document.getElementById('aiMessageVal').textContent = summary.message;
-      document.getElementById('aiFinalScoreVal').textContent = summary.suggestedScore !== undefined ? summary.suggestedScore : 30;
+
+      const scoreContainer = document.getElementById('aiFinalScoreContainer');
+      if (scoreContainer) {
+        if (isNewType) {
+          scoreContainer.style.display = 'none';
+        } else {
+          scoreContainer.style.display = 'flex';
+          document.getElementById('aiFinalScoreVal').textContent = summary.suggestedScore !== undefined ? summary.suggestedScore : 15;
+        }
+      }
 
       // Render table rows
       const tbody = document.getElementById('aiDetailTableBody');
@@ -2135,6 +3524,9 @@
           tdA.style.fontSize = '13px';
           tdA.style.padding = '12px 14px';
           tdA.innerHTML = r.aiAnswer;
+          if (isNewType && r.reason) {
+            tdA.innerHTML += `<div style="font-size:11px; color:#8c8c8c; margin-top:4px;">依据: ${r.reason}</div>`;
+          }
           tr.appendChild(tdA);
 
           const tdSet = document.createElement('td');
@@ -2145,12 +3537,14 @@
           tdSet.textContent = r.setAnswer;
           tr.appendChild(tdSet);
 
-          const tdRea = document.createElement('td');
-          tdRea.style.fontSize = '12px';
-          tdRea.style.color = '#666';
-          tdRea.style.padding = '12px 14px';
-          tdRea.innerHTML = r.reason;
-          tr.appendChild(tdRea);
+          if (!isNewType) {
+            const tdRea = document.createElement('td');
+            tdRea.style.fontSize = '12px';
+            tdRea.style.color = '#666';
+            tdRea.style.padding = '12px 14px';
+            tdRea.innerHTML = r.reason;
+            tr.appendChild(tdRea);
+          }
 
           tbody.appendChild(tr);
         });
@@ -2160,9 +3554,17 @@
       if (summary.resultBadge.includes('部分')) {
         document.getElementById('auditNotes').value = `AI判定部分达标：转发截图有效，评论去重通过 1 张（需 2 张）。按照业务期望予以总体通过，核发单张合规图片对应的奖励。`;
       } else if (summary.statusText.includes('成功')) {
-        document.getElementById('auditNotes').value = `AI智能审核判定正常，${key.includes('fwcm') ? '转发截图与评论数据正常通过' : '评论截图正常提取并通过'}，数据完整合规。`;
+        if (isNewType) {
+          document.getElementById('auditNotes').value = `AI智能审核判定正常，${summary.message}，数据完整合规。`;
+        } else {
+          document.getElementById('auditNotes').value = `AI智能审核判定正常，${key.includes('fwcm') ? '转发截图与评论数据正常通过' : '评论截图正常提取并通过'}，数据完整合规。`;
+        }
       } else {
-        document.getElementById('auditNotes').value = `AI判定不通过：转发图片或评论未通过校验（昵称不符或未达标）。根据业务审核规则，驳回请求。`;
+        if (isNewType) {
+          document.getElementById('auditNotes').value = `AI判定不通过：${summary.message || '未满足审核条件'}。根据业务审核规则，驳回请求。`;
+        } else {
+          document.getElementById('auditNotes').value = `AI判定不通过：转发图片或评论未通过校验（昵称不符或未达标）。根据业务审核规则，驳回请求。`;
+        }
       }
       updateCharCount();
     }
@@ -2179,36 +3581,78 @@
       }
     });
 
+    // Guide New Sub Tab Switching Function
+    function switchGuideNewSubTab(tabId, element) {
+      document.querySelectorAll('.guide-new-sub-content').forEach(c => c.style.display = 'none');
+      document.getElementById('guide_new_sub_' + tabId).style.display = 'block';
+
+      const buttons = document.querySelectorAll('#guide_new_subtabs_container .sub-tab-btn');
+      buttons.forEach(btn => {
+        btn.style.background = 'transparent';
+        btn.style.color = '#666';
+        btn.style.border = '1px solid transparent';
+      });
+
+      if (element) {
+        element.style.background = '#f6ffed';
+        element.style.color = '#389e0d';
+        element.style.border = '1px solid #b7eb8f';
+      }
+    }
+
     // Main Tab Switching Function
     function switchMainTab(tabKey) {
+      if (window.location.hash !== '#' + tabKey) {
+        window.history.replaceState(null, null, '#' + tabKey);
+      }
+
       const tabAudit = document.getElementById('main_tab_audit');
       const tabGuide = document.getElementById('main_tab_guide');
-      const tabBtnAudit = document.getElementById('tab_btn_audit');
-      const tabBtnGuide = document.getElementById('tab_btn_guide');
+      const tabGuideNew = document.getElementById('main_tab_guide_new');
+      const tabsBar = document.getElementById('tabs_container_audit');
+
       const sideAudit = document.getElementById('side_menu_audit');
       const sideGuide = document.getElementById('side_menu_guide');
+      const sideGuideNew = document.getElementById('side_menu_guide_new');
+
+      if (tabAudit) tabAudit.style.display = 'none';
+      if (tabGuide) tabGuide.style.display = 'none';
+      if (tabGuideNew) tabGuideNew.style.display = 'none';
+
+      document.querySelectorAll('.sidebar .menu-item').forEach(m => m.classList.remove('active'));
 
       if (tabKey === 'guide') {
-        if (tabAudit) tabAudit.style.display = 'none';
+        if (tabsBar) tabsBar.style.display = 'none';
         if (tabGuide) tabGuide.style.display = 'block';
-        document.querySelectorAll('.tabs-container .tab').forEach(t => t.classList.remove('active'));
-        if (tabBtnGuide) tabBtnGuide.classList.add('active');
-        document.querySelectorAll('.sidebar .menu-item').forEach(m => m.classList.remove('active'));
         if (sideGuide) sideGuide.classList.add('active');
+      } else if (tabKey === 'guide_new') {
+        if (tabsBar) tabsBar.style.display = 'none';
+        if (tabGuideNew) tabGuideNew.style.display = 'block';
+        if (sideGuideNew) sideGuideNew.classList.add('active');
       } else {
-        if (tabGuide) tabGuide.style.display = 'none';
+        if (tabsBar) tabsBar.style.display = 'flex';
         if (tabAudit) tabAudit.style.display = 'block';
-        document.querySelectorAll('.tabs-container .tab').forEach(t => t.classList.remove('active'));
-        if (tabBtnAudit) tabBtnAudit.classList.add('active');
-        document.querySelectorAll('.sidebar .menu-item').forEach(m => m.classList.remove('active'));
         if (sideAudit) sideAudit.classList.add('active');
       }
     }
 
-    // Auto-open modal on load for demo showcase
+    // Auto-open modal on load or navigate to guide based on URL hash
     window.onload = function () {
-      openModal('fwcm');
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'guide' || hash === 'guide_new') {
+        switchMainTab(hash);
+      } else {
+        switchMainTab('audit');
+        openModal('fwcm');
+      }
     };
+
+    window.addEventListener('hashchange', function() {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'guide' || hash === 'guide_new' || hash === 'audit') {
+        switchMainTab(hash);
+      }
+    });
   </script>
 </body>
 
