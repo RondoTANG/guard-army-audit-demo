@@ -1290,9 +1290,12 @@
         <h2
           style="font-size: 18px; color: #0050b3; margin: 36px 0 16px 0; border-left: 4px solid #1890ff; padding-left: 10px; font-weight: 600;">
           三、 图片明细解析对象 (<code style="font-family:monospace;">detailed_results</code> 数组元素)</h2>
-        <p>该数组内的每个 Object 代表单张图片的处理结果。为方便前端统一解析渲染，<strong>所有图片对象都会输出同一套全量 Key 矩阵</strong>（无关或未识别字段自动赋空值）。请严格根据 <code
+        <p>该数组内的每个 Object 代表单张图片的处理结果。每张图片均返回“通用基础字段”，并根据图片类型追加对应的“分类专属字段”；<strong>不属于当前分类的专属字段不得混入返回对象</strong>。请严格根据 <code
             style="background:#f0f0f0; padding:2px 6px; border-radius:4px; color:#1890ff; font-weight:600;">category</code>
           字段的值来分发对应业务逻辑模块。</p>
+        <p style="margin: 10px 0 18px; padding: 10px 14px; background:#fffbe6; border-left:4px solid #faad14; color:#614700;">
+          <strong>文本字段引号规范：</strong>Python 在最终序列化前，会将所有字符串值内部的双引号统一转换为直角引号 <code>「」</code>，包括英文直双引号、中文弯双引号和全角双引号。例如 <code>“优秀”</code>、<code>"厉害了"</code>、<code>＂安全＂</code> 分别输出为 <code>「优秀」</code>、<code>「厉害了」</code>、<code>「安全」</code>。该处理不改变 JSON 字段名、结构引号、布尔值、数值及业务判定。
+        </p>
 
         <h3
           style="font-size: 16px; color: #333; margin: 24px 0 12px 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
@@ -1376,10 +1379,12 @@
             <tr>
               <td><code style="font-weight:bold;">is_live_stream</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>是否带有“红色直播中/灰色直播结束”状态标识或底部视频号来源挂件条。<br /><span
-                  style="color:#cf1322; font-weight:600; font-size:12px;">【拦截强校验】：后端验证代码已收紧，要求
-                  <code>match == true</code> 且 <code>is_live_stream == true</code> 同时满足时，该截图的 <code>status</code> 才会判定为
-                  <code>passed</code>。</span></td>
+              <td><strong>是否为本次要求的指定目标直播分享卡片</strong>，不是单纯判断画面中是否出现“直播中”。判定顺序：<br />
+                ① 若卡片中央存在明显圆形播放按钮“▶”，按普通视频处理，返回 <code>false</code>；<br />
+                ② 必须先出现“直播中/直播已结束”等直播状态标签或明确直播文案，确认体裁确为直播；<br />
+                ③ 再校验目标直播间：有“视频号·XXX”来源条时，XXX 必须与 <code>live_room_name_input</code> 满足包含关系或共享核心词；无来源条时，才允许使用海报主标题或文案中的目标品牌/业务核心词降级匹配。<br />
+                <span style="color:#cf1322; font-weight:600; font-size:12px;">【重要】：<code>live_status</code> 仅记录画面中识别到的标签原文，不能单独把 <code>is_live_stream</code> 推导为 <code>true</code>。例如卡片显示“直播中”，但来源账号与目标直播间不匹配时，<code>live_status</code> 可为“直播中”，<code>is_live_stream</code> 仍应为 <code>false</code>。后端仅在 <code>match == true</code> 且 <code>is_live_stream == true</code> 时，将朋友圈截图的 <code>status</code> 判定为 <code>passed</code>。</span>
+              </td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">live_status</code></td>
@@ -1587,7 +1592,7 @@
           六、 返回结果示例 (finalresult JSON)</h2>
         <p>以下是经过多模态大模型判定并由 Python 去重节点结算后输出的 <code
             style="background:#f0f0f0; padding:2px 6px; border-radius:4px; font-family:monospace; color:#0050b3; font-weight:600;">finalresult</code>
-          JSON 示例。该示例覆盖了转发图验证通过、有效评论去重防伪、作弊重复图拦截等多重场景：</p>
+          JSON 示例。文本字段值中的双引号在此之前已统一归一化为 <code>「」</code>；JSON 结构本身仍使用标准英文双引号。该示例覆盖了转发图验证通过、有效评论去重防伪、作弊重复图拦截等多重场景：</p>
         <pre
           style="background: #f5f5f5; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; border: 1px solid #e8e8e8; line-height: 1.5; font-family: 'Courier New', Courier, monospace;"><code class="language-json">{
   "task_passed": true,
