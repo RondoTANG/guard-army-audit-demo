@@ -359,6 +359,21 @@
       white-space: normal;
     }
 
+    #main_tab_guide_new .guide-version-label {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 6px;
+      border: 1px solid #ffa39e;
+      border-radius: 4px;
+      background: #fff1f0;
+      color: #cf1322;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.5;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
 
     .link-btn {
       color: var(--primary-color);
@@ -1438,14 +1453,23 @@
             <tr>
               <td><code style="font-weight:bold;">user_comment_found</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>是否在公屏列表或底部第一人称输入框成功寻获对应绑定用户的有效评论。</td>
+              <td>是否在底部第一人称输入区、普通滚动公屏或上墙/置顶展示区中找到<strong>截图用户本人</strong>的有效评论。本人身份既可由非空的 <code>user_nickname</code> 建立，也可由输入区昵称前缀或公屏“我/me”标识建立；三个区域取并集。即使 <code>user_nickname</code> 为空或昵称状态不是 <code>MATCHED</code>，只要第一人称证据已确认本人且找到对应评论，仍返回 <code>true</code>。</td>
+            </tr>
+            <tr>
+              <td><code style="font-weight:bold;">is_highlight</code></td>
+              <td><span class="badge badge-neutral">Boolean</span></td>
+              <td><strong>截图用户本人的评论是否上墙或置顶</strong>。<br>
+                <strong>判断顺序：</strong>先判断直播间主体是否达标（<code>live_room_name_match</code>），再判断本人评论是否上墙/置顶。<br>
+                <code>live_room_name_match == true</code> 时，根据画面识别结果返回 <code>true</code> 或 <code>false</code>；<code>live_room_name_match == false</code> 时，即使画面识别到评论已上墙/置顶，<code>is_highlight</code> 也会被 Python 强制置为 <code>false</code>。<br>
+                <strong>判断流程：</strong><code>直播间主体达标？</code> → 否：<code>is_highlight = false</code>；是：继续判断本人评论是否上墙/置顶。<br>
+                视频号兼容“昵称与正文分行显示”的白色上墙卡片，抖音兼容“@昵称 的评论 + 正文”的白色置顶卡片。本人身份可由非空的 <code>user_nickname</code>、输入区昵称前缀或公屏“我/me”标识确认，不要求 <code>name_match_status</code> 必须为 <code>MATCHED</code>。如果模型识别为 <code>true</code> 但因直播间主体未达标被改为 <code>false</code>，单图 <code>reason/message</code> 与最终汇总 <code>message</code> 会追加校正原因。该字段仅做证据标记，暂不改变去重与任务结算。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">name_match_status</code></td>
               <td><span class="badge badge-neutral">String</span></td>
-              <td>评论用户昵称匹配状态：<code style="color:#389e0d; font-weight:bold;">MATCHED</code> (实际评论昵称与输入 user_nickname 一致),
-                <code style="color:#cf1322; font-weight:bold;">NOT_FOUND</code> (未找到评论), <code
-                  style="color:#cf1322; font-weight:bold;">MISMATCHED</code> (找到评论但昵称不一致)。
+              <td>截图用户本人昵称与入参的风险匹配状态：<code style="color:#389e0d; font-weight:bold;">MATCHED</code>（实际本人昵称与非空的 <code>user_nickname</code> 一致），
+                <code style="color:#cf1322; font-weight:bold;">NOT_FOUND</code>（未提取到本人昵称），<code
+                  style="color:#cf1322; font-weight:bold;">MISMATCHED</code>（已提取本人昵称，但与入参不一致或入参为空）。该状态仅用于风险记录，不覆盖 <code>user_comment_found</code> 或 <code>is_highlight</code>。
               </td>
             </tr>
             <tr>
@@ -1628,8 +1652,11 @@
       "category": "live_stream",
       "is_live_stream": true,
       "match": true,
+      "live_room_name_match": true,
       "name_match_status": "MATCHED",
       "livename_match_status": "MATCHED",
+      "user_comment_found": true,
+      "is_highlight": true,
       "user_comment": "主播好美啊",
       "fingerprint_time": "14:20",
       "fingerprint_comments": "李四:支持|王五:大气",
@@ -1646,8 +1673,11 @@
       "category": "live_stream",
       "is_live_stream": true,
       "match": true,
+      "live_room_name_match": true,
       "name_match_status": "MATCHED",
       "livename_match_status": "MATCHED",
+      "user_comment_found": true,
+      "is_highlight": false,
       "user_comment": "再发一条",
       "fingerprint_time": "14:20",
       "fingerprint_comments": "李四:支持|王五:大气",
@@ -1664,8 +1694,11 @@
       "category": "live_stream",
       "is_live_stream": true,
       "match": true,
+      "live_room_name_match": true,
       "name_match_status": "MATCHED",
       "livename_match_status": "MATCHED",
+      "user_comment_found": true,
+      "is_highlight": false,
       "user_comment": "换个姿势截图",
       "fingerprint_time": "14:25",
       "fingerprint_comments": "赵六:价格多少|测试:冲冲冲",
@@ -1804,9 +1837,9 @@
 
         <p
           style="background: #fbfbfb; padding: 12px 16px; border-left: 4px solid #52c41a; border-radius: 0 4px 4px 0; margin-bottom: 24px;">
-          本指南用于说明“互动评论检测工作流”在不同业务场景下的调用方式、入参规范及返回数据结构。工作流的最终输出为一个 JSON 格式的字符串，通常包裹在 <code
-            style="background:#e6f7ff; padding:2px 6px; border-radius:4px; font-family:monospace; color:#0050b3; font-weight:600;">answer</code>
-          字段内。外部系统在接收到返回值后，需要对 answer 字段进行 JSON 反序列化解析。
+          本指南用于说明“互动评论检测工作流”在不同业务场景下的调用方式、入参规范及返回数据结构。当前工作流 End 节点返回 <code
+            style="background:#e6f7ff; padding:2px 6px; border-radius:4px; font-family:monospace; color:#0050b3; font-weight:600;">output</code>
+          字段（String），内容为 JSON 字符串。外部系统获取后需对该字符串进行一次 JSON 反序列化；若通过对话智能体调用，以其实际响应封装为准。
         </p>
 
         <!-- Sub Tabs Menu -->
@@ -1823,7 +1856,7 @@
             3. 点赞特定评论 (dzpl)</div>
           <div class="sub-tab-btn" onclick="switchGuideNewSubTab('pinglun', this)"
             style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; color: #666; border: 1px solid transparent; transition: all 0.2s;">
-            4. 评论内容审核 (pinglun)</div>
+            4. 评论内容审核 (pinglun)<span class="guide-version-label">2.0 新增</span></div>
 
           <div class="sub-tab-btn" onclick="switchGuideNewSubTab('mapping', this)"
             style="cursor: pointer; padding: 6px 16px; border-radius: 4px; font-weight: 500; color: #666; border: 1px solid transparent; transition: all 0.2s;">
@@ -1864,7 +1897,7 @@
               <td>平台标识（可选，如 gzh, sph, dcd, yc, wb, dy 等，若为空默认走微信双考核分支）</td>
             </tr>
             <tr>
-              <td><code>img</code></td>
+              <td><code>images</code></td>
               <td><code>Array&lt;Img&gt;</code></td>
               <td>必填，图片上传文件列表</td>
             </tr>
@@ -1917,7 +1950,7 @@
           <pre
             style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
 // 有点赞，有喜欢
-// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+// (提示：工作流返回 output:String，此为反序列化后的结构明细)
 [
   {
     "index": "0",
@@ -1982,7 +2015,7 @@
               <td>动作类型标识</td>
             </tr>
             <tr>
-              <td><code>img</code></td>
+              <td><code>images</code></td>
               <td><code>Array&lt;Img&gt;</code></td>
               <td>必填，图片上传文件列表</td>
             </tr>
@@ -2101,7 +2134,7 @@
           <pre
             style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
 // 有点赞，有喜欢
-// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+// (提示：工作流返回 output:String，此为反序列化后的结构明细)
 [
   {
     "index": "0",
@@ -2166,7 +2199,7 @@
               <td>动作类型标识</td>
             </tr>
             <tr>
-              <td><code>img</code></td>
+              <td><code>images</code></td>
               <td><code>Array&lt;Img&gt;</code></td>
               <td>必填，图片上传文件列表</td>
             </tr>
@@ -2236,7 +2269,7 @@
           <pre
             style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
 // 有点赞的评论
-// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+// (提示：工作流返回 output:String，此为反序列化后的结构明细)
 [
   {
     "index": "0",
@@ -2286,8 +2319,8 @@
         <!-- 4. pinglun -->
         <div id="guide_new_sub_pinglun" class="guide-new-sub-content" style="display: none; animation: fadeIn 0.3s;">
           <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">验证场景：评论内容审核
-            (支持截图与纯文本)</h3>
-          <p style="color:#666; margin-bottom: 16px;">验证用户的评论文本是否达标（包含特定文案、字数达标、情绪等），支持“截图视觉提取”与“纯文本直传”两种模式。</p>
+            (支持截图与纯文本)<span class="guide-version-label">2.0 新增</span></h3>
+          <p style="color:#666; margin-bottom: 16px;">保留原有评论提取、关键词、字数和情绪审核字段。<strong>2.0 新增</strong>关联文章内容入参；有文章内容且进入分析分支时，在原返回结构中追加文章场景、评论类型、无效原因、强证据和五维质量分析，不改变原有字段与纯文本对象／截图数组的形态。</p>
 
           <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参 (截图模式)</h4>
           <table class="data-table" style="width: 100%; margin-bottom: 16px;">
@@ -2307,9 +2340,9 @@
               <td>动作类型标识</td>
             </tr>
             <tr>
-              <td><code>img</code></td>
+              <td><code>images</code></td>
               <td><code>Array&lt;Img&gt;</code></td>
-              <td>必填，图片上传文件列表</td>
+              <td>必填，图片上传文件列表（工作流开始节点字段名为 <code>images</code>）</td>
             </tr>
             <tr>
               <td><code>num</code></td>
@@ -2326,6 +2359,11 @@
               <td>String</td>
               <td>可选，在截图中寻址特定的用户昵称</td>
             </tr>
+            <tr style="background:#f0f7ff;">
+              <td><code>scene_context</code></td>
+              <td>String</td>
+              <td><strong>2.0 新增</strong>，关联文章内容；为空时跳过五维分析，保留原审核结果。</td>
+            </tr>
           </table>
 
           <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参 (纯文本模式)</h4>
@@ -2341,6 +2379,11 @@
               <td>纯文本模式</td>
             </tr>
             <tr>
+              <td><code>checktype</code></td>
+              <td><code>"pinglun"</code></td>
+              <td>动作类型标识</td>
+            </tr>
+            <tr>
               <td><code>comment</code></td>
               <td>String</td>
               <td>必填，待分析的纯文本内容</td>
@@ -2349,6 +2392,11 @@
               <td><code>num</code> / <code>content</code></td>
               <td>同上</td>
               <td>同上，进行字数和关键词校验</td>
+            </tr>
+            <tr style="background:#f0f7ff;">
+              <td><code>scene_context</code></td>
+              <td>String</td>
+              <td><strong>2.0 新增</strong>，关联文章内容；为空时跳过五维分析，保留原审核结果。</td>
             </tr>
           </table>
 
@@ -2397,7 +2445,7 @@
             <tr>
               <td><code style="font-weight:bold;">word_count_gt_num</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>提取出的评论字数是否大于等于业务要求的字数门槛。</td>
+              <td>提取出的评论字数是否严格大于业务要求的字数门槛。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">word_count</code></td>
@@ -2418,6 +2466,11 @@
               <td><code style="font-weight:bold;">user_comments</code></td>
               <td><span class="badge badge-neutral">Array&lt;Object&gt;</span></td>
               <td>提取到的所有用户评论及解析明细数组。</td>
+            </tr>
+            <tr style="background:#f0f7ff;">
+              <td><code style="font-weight:bold;">content_scene</code></td>
+              <td><span class="badge badge-neutral">Object</span></td>
+              <td><strong>2.0 新增</strong>，与 <code>index</code> 同层；同篇文章多张截图时会重复该场景对象，仅在五维分析成功并完成合并后出现。</td>
             </tr>
             <tr style="background:#f9f9f9;">
               <td colspan="3"><strong style="color:#0050b3;">user_comments 内对象属性：</strong></td>
@@ -2450,7 +2503,7 @@
             <tr>
               <td style="padding-left: 20px;"><code style="font-weight:bold;">word_count_gt_num</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>字数是否达标。</td>
+              <td>字数是否严格大于要求。</td>
             </tr>
           </table>
 
@@ -2462,9 +2515,9 @@
               <th>业务说明与判定准则</th>
             </tr>
             <tr>
-              <td><code style="color:#1890ff; font-weight:bold;">match</code></td>
+              <td><code style="color:#1890ff; font-weight:bold;">comment_match</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>整体匹配状态，固定为 <code>true</code>。</td>
+              <td>原有纯文本评论匹配结果；与截图模式的 <code>match</code> 字段不同。</td>
             </tr>
             <tr>
               <td><code style="font-weight:bold;">content</code></td>
@@ -2494,41 +2547,73 @@
             <tr>
               <td><code style="font-weight:bold;">word_count_gt_num</code></td>
               <td><span class="badge badge-neutral">Boolean</span></td>
-              <td>评论字数是否大于等于字数门槛。</td>
+              <td>评论字数是否严格大于字数门槛。</td>
+            </tr>
+            <tr style="background:#f0f7ff;">
+              <td><code style="font-weight:bold;">content_scene</code></td>
+              <td><span class="badge badge-neutral">Object</span></td>
+              <td><strong>2.0 新增</strong>，与 <code>comment_match</code> 同层，仅在五维分析成功并完成合并后出现。</td>
             </tr>
           </table>
 
+          <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">2.0 新增字段（两种模式共用）</h4>
+          <p style="color:#666; margin-bottom: 8px;">截图模式：下列评论字段写入对应 <code>user_comments[]</code>；纯文本模式：直接写入原返回对象。<code>content_scene</code> 位于上述各自的外层对象，不写入每条 <code>user_comments[]</code>。</p>
+          <table class="data-table" style="width: 100%; margin-bottom: 16px;">
+            <tr style="background:#fafafa;"><th style="width:180px;">字段名</th><th style="width:120px;">类型</th><th>2.0 字段说明</th></tr>
+            <tr><td><code>content_scene.major_type</code></td><td>String</td><td>文章场景大类：<code>集团重点事件</code>、<code>产品舆情</code>、<code>日常内容</code>。</td></tr>
+            <tr><td><code>content_scene.sub_type</code></td><td>String</td><td>文章场景小类，如 <code>技术解读</code>、<code>战略发布</code>；由关联文章内容判断。</td></tr>
+            <tr><td><code>emotion</code></td><td>String</td><td>评论情感：<code>正面</code>、<code>负面</code>、<code>中性</code>；与原有布尔字段 <code>is_positive</code> 并存。</td></tr>
+            <tr><td><code>comment_type</code></td><td>String</td><td><code>路人小白型</code>、<code>普通车主型</code>、<code>圈内洞察型</code>或<code>趣味玩梗型</code>。</td></tr>
+            <tr><td><code>invalid_reason</code></td><td>String / null</td><td>无效原因：<code>内容跑题</code>、<code>身份暴露</code>、<code>内容空洞无物</code>、<code>违规风险</code>；未命中时为 <code>null</code>。不替换原审核结果。</td></tr>
+            <tr><td><code>strong_evidence</code></td><td>Array&lt;String&gt;</td><td>从评论正文识别的强证据标签；无命中时为空数组。</td></tr>
+            <tr><td><code>reason</code></td><td>String</td><td>多维质量分析的简要判定理由。</td></tr>
+            <tr><td><code>dimensions</code></td><td>Array&lt;Object&gt;</td><td>固定五项：真实路人感、信息含金量、记忆传播点、网言网语感、互动引导性；每项含 <code>name</code>、<code>score</code>（0～100）和 <code>analysis</code>。</td></tr>
+          </table>
+          <p style="color:#666; margin-bottom: 16px;">截图仅在有匹配评论（<code>match=true</code>）且 <code>scene_context</code> 非空时进入五维分析；纯文本在 <code>scene_context</code> 非空时进入。未进入、模型结果不匹配或合并失败时，仍返回原审核字段，不保证出现 2.0 字段。2.0 不输出 <code>tier</code>、<code>type_focus</code> 或 <code>effective_length</code>。</p>
+
           <pre
             style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
-// 截图模式成功
-// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)
+// 2.0 截图模式成功（示意：工作流 output 字符串反序列化后的数组）
 [
   {
     "index": "0",
     "imageurl": "...",
-    "imagename": "...png",
+    "imagename": "评论截图.png",
     "category": "comment",
     "match": true,
     "name_match_status": "MATCHED",
     "content_match": true,
     "is_positive": true,
     "word_count_gt_num": true,
-    "word_count": 17,
+    "word_count": 35,
     "emoji_only": false,
+    "content_scene": {"major_type": "产品舆情", "sub_type": "技术解读"},
     "user_comments": [
       {
-        "content": "给爱心人士👍...",
+        "content": "800V插混配大电池，平时通勤用电，周末跑远路也方便，这个组合挺实在。",
         "emoji_only": false,
         "content_match": true,
         "is_positive": true,
-        "word_count": 17,
-        "word_count_gt_num": true
+        "word_count": 35,
+        "word_count_gt_num": true,
+        "emotion": "正面",
+        "comment_type": "路人小白型",
+        "invalid_reason": null,
+        "strong_evidence": [],
+        "reason": "结合通勤与周末出行场景，认可插混方案，表达自然。",
+        "dimensions": [
+          {"name": "真实路人感", "score": 78, "analysis": "用语自然，有生活场景。"},
+          {"name": "信息含金量", "score": 65, "analysis": "提到技术及使用场景。"},
+          {"name": "记忆传播点", "score": 62, "analysis": "评价直接，记忆点一般。"},
+          {"name": "网言网语感", "score": 72, "analysis": "口语自然，网感适中。"},
+          {"name": "互动引导性", "score": 58, "analysis": "没有明确提问。"}
+        ]
       }
     ]
   }
 ]
 
-// 截图不符合规范(invalid)
+// 截图未匹配：跳过五维分析，保留原结果
 [
   {
     "index": "0",
@@ -2546,15 +2631,28 @@
   }
 ]
 
-// 纯文本模式成功 (平铺直出)
+// 2.0 纯文本模式成功（示意：仍为原对象平铺追加字段）
 {
-  "match": true,
-  "content": "东风日产的NX8大气时尚！",
+  "comment_match": true,
+  "content": "800V插混配大电池，平时通勤用电，周末跑远路也方便，这个组合挺实在。",
   "emoji_only": false,
   "content_match": true,
   "is_positive": true,
-  "word_count": 13,
-  "word_count_gt_num": true
+  "word_count": 35,
+  "word_count_gt_num": true,
+  "content_scene": {"major_type": "产品舆情", "sub_type": "技术解读"},
+  "emotion": "正面",
+  "comment_type": "路人小白型",
+  "invalid_reason": null,
+  "strong_evidence": [],
+  "reason": "结合通勤与周末出行场景，认可插混方案，表达自然。",
+  "dimensions": [
+    {"name": "真实路人感", "score": 78, "analysis": "用语自然，有生活场景。"},
+    {"name": "信息含金量", "score": 65, "analysis": "提到技术及使用场景。"},
+    {"name": "记忆传播点", "score": 62, "analysis": "评价直接，记忆点一般。"},
+    {"name": "网言网语感", "score": 72, "analysis": "口语自然，网感适中。"},
+    {"name": "互动引导性", "score": 58, "analysis": "没有明确提问。"}
+  ]
 }
 </pre>
         </div>
@@ -2589,7 +2687,7 @@
               <td>平台标识（必填，如 dcd, yc, xhs, dy, ks, bz, wb, tt, zh）</td>
             </tr>
             <tr>
-              <td><code>img</code></td>
+              <td><code>images</code></td>
               <td><code>Array&lt;Img&gt;</code></td>
               <td>必填，图片上传文件列表</td>
             </tr>
@@ -2642,7 +2740,7 @@
           <pre
             style="background: #2b2b2b; color: #f8f8f2; padding: 16px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 13px; line-height: 1.5;">
 <span style="color:#888;">// 有点赞</span>
-<span style="color:#888;">// (提示：实际返回为带 answer 包装的 JSON 字符串，此为反序列化后的结构明细)</span>
+<span style="color:#888;">// (提示：工作流返回 output:String，此为反序列化后的结构明细)</span>
 [
   {
     "index": "0",
@@ -2989,7 +3087,7 @@
                       title="根据业务规则配置的多图核验问询矩阵">?</span>
                   </th>
                   <th style="width: 250px;">AI答案 (含原因) <span class="dev-tip" id="tip_ai_a"
-                      title="API核心字段: name_match_status, livename_match_status, user_comment, is_duplicate 等">?</span>
+                      title="API核心字段: name_match_status, livename_match_status, user_comment, is_highlight, is_duplicate 等">?</span>
                   </th>
                   <th style="width: 90px; text-align:center;">设置答案</th>
                   <th id="th_evidence">审核详情与证据链说明 <span class="dev-tip" id="tip_evidence"
