@@ -2320,7 +2320,7 @@
         <div id="guide_new_sub_pinglun" class="guide-new-sub-content" style="display: none; animation: fadeIn 0.3s;">
           <h3 style="color:#000; margin-bottom: 12px; border-left: 4px solid #1890ff; padding-left: 8px;">验证场景：评论内容审核
             (支持截图与纯文本)<span class="guide-version-label">2.1 方案更新</span></h3>
-          <p style="color:#666; margin-bottom: 16px;">保留原有评论提取、关键词、字数和情绪审核字段，以及纯文本对象／截图数组的返回形态。2.0 已新增关联文章内容与评论质量分析；<strong>2.1 在质量分析结果中新增评论等级 <code>tier</code></strong>，按 0／5／10／15 分顺序判定，仅 10 分、15 分评论返回五维明细。本节 2.1 为当前本地方案说明，<strong>不代表线上工作流已发布该规则</strong>；接入前须以实际工作流跑测结果确认。</p>
+          <p style="color:#666; margin-bottom: 16px;">保留原有评论提取、关键词、字数和情绪审核字段，以及纯文本对象／截图数组的返回形态。2.0 已新增关联文章内容与评论质量分析；<strong>2.1 在质量分析结果中新增评论等级 <code>tier</code>，统一用 <code>reason</code>说明评级，不再输出 <code>invalid_reason</code></strong>。按 0／5／10／15 分顺序判定，仅 10 分、15 分评论返回五维明细。本节 2.1 为当前本地方案说明，<strong>不代表线上工作流已发布该规则</strong>；接入前须以实际工作流跑测结果确认。</p>
 
           <h4 style="font-weight: 600; margin: 16px 0 8px 0; color:#333;">请求入参 (截图模式)</h4>
           <table class="data-table" style="width: 100%; margin-bottom: 16px;">
@@ -2564,14 +2564,13 @@
             <tr><td><code>content_scene.sub_type</code></td><td>String</td><td>文章场景小类，如 <code>技术解读</code>、<code>战略发布</code>；由关联文章内容判断。</td></tr>
             <tr><td><code>emotion</code></td><td>String</td><td>评论情感：<code>正面</code>、<code>负面</code>、<code>中性</code>；与原有布尔字段 <code>is_positive</code> 并存。</td></tr>
             <tr><td><code>comment_type</code></td><td>String</td><td><code>路人小白型</code>、<code>普通车主型</code>、<code>圈内洞察型</code>或<code>趣味玩梗型</code>。</td></tr>
-            <tr><td><code>invalid_reason</code></td><td>String / null</td><td>无效原因：<code>内容跑题</code>、<code>身份暴露</code>、<code>内容空洞无物</code>、<code>违规风险</code>；未命中时为 <code>null</code>。不替换原审核结果。</td></tr>
             <tr style="background:#fff1f0;"><td><code>tier</code> <span class="guide-version-label">2.1 新增</span></td><td>String</td><td>评论等级：<code>无效</code>／<code>普通</code>／<code>良好</code>／<code>优秀</code>，分别对应业务评分 0／5／10／15 分；不额外输出分数字段。</td></tr>
             <tr><td><code>strong_evidence</code></td><td>Array&lt;String&gt;</td><td>从评论正文识别的强证据标签；无命中时为空数组。</td></tr>
-            <tr><td><code>reason</code></td><td>String</td><td>多维质量分析的简要判定理由。</td></tr>
+            <tr style="background:#fff1f0;"><td><code>reason</code> <span class="guide-version-label">2.1 统一</span></td><td>String</td><td>供运营查看的简短评级说明：无效时写明无效类别与直接依据；普通、良好、优秀时说明对应档位的依据。2.1 不再单独输出 <code>invalid_reason</code>。</td></tr>
             <tr><td><code>dimensions</code></td><td>Array&lt;Object&gt;</td><td><strong>2.1 按等级输出</strong>：无效／普通为 <code>[]</code>；良好／优秀为固定五项：真实路人感、信息含金量、记忆传播点、网言网语感、互动引导性。每项含 <code>name</code>、<code>score</code>（0～100）和 <code>analysis</code>。五项并列，无主次。</td></tr>
           </table>
           <p style="color:#666; margin-bottom: 8px;">2.1 判定顺序：先排除<strong>0分／无效</strong>；未命中无效且满足内容相关、表达通顺、符合规范、视角合理、至少 5 个非空白字符时，为<strong>5分／普通</strong>；其余具备基础资格且未触发字数封顶的评论，再经五维评估判断能否升级为<strong>10分／良好</strong>或<strong>15分／优秀</strong>。当前本地提示词规定：有效字数达到 50 字最高为普通；良好需五维至少一项 ≥88 且全部 ≥60；优秀在良好基础上需至少一项 ≥90 或至少三项 ≥88。强证据标签仅用于描述，不按数量直接升档。这些门槛属于当前 2.1 方案，尚需结合业务验收确认。</p>
-          <p style="color:#666; margin-bottom: 16px;">截图仅在有匹配评论（<code>match=true</code>）且 <code>scene_context</code> 非空时进入质量分析；纯文本在 <code>scene_context</code> 非空时进入。原字段保持不变：截图仍用 <code>match</code>，纯文本仍用 <code>comment_match</code>。未进入分析、模型结果不匹配或合并失败时，仍返回原审核字段，不保证出现 2.0／2.1 新增字段。2.1 不输出 <code>type_focus</code> 或 <code>effective_length</code>；现有聚合脚本只合并模型的 <code>tier</code> 与维度结果，不负责重新计算或强校验档位。</p>
+          <p style="color:#666; margin-bottom: 16px;">截图仅在有匹配评论（<code>match=true</code>）且 <code>scene_context</code> 非空时进入质量分析；纯文本在 <code>scene_context</code> 非空时进入。原字段保持不变：截图仍用 <code>match</code>，纯文本仍用 <code>comment_match</code>。未进入分析、模型结果不匹配或合并失败时，仍返回原审核字段，不保证出现 2.0／2.1 新增字段。<strong>依赖 2.0 <code>invalid_reason</code> 的调用方，接入 2.1 时须改读 <code>tier</code> 与 <code>reason</code>。</strong>2.1 不输出 <code>type_focus</code> 或 <code>effective_length</code>；现有聚合脚本只合并模型的等级与说明，不负责重新计算或强校验档位。</p>
 
           <pre
             style="background:#282c34; color:#abb2bf; padding:12px; border-radius:4px; font-family:monospace; font-size:13px; overflow-x:auto;">
@@ -2600,7 +2599,6 @@
         "word_count_gt_num": true,
         "emotion": "正面",
         "comment_type": "路人小白型",
-        "invalid_reason": null,
         "tier": "普通",
         "strong_evidence": [],
         "reason": "结合通勤与周末出行场景表达认可，尚未达到良好档五维门槛。",
@@ -2639,8 +2637,7 @@
   "word_count_gt_num": true,
   "content_scene": {"major_type": "集团重点事件", "sub_type": "战略发布"},
   "emotion": "正面",
-  "comment_type": "圈内洞察型",
-  "invalid_reason": null,
+  "comment_type": "路人小白型",
   "tier": "良好",
   "strong_evidence": ["对比演进"],
   "reason": "对比以往单独发力与本次合作，并提出产品落地问题，有明确讨论价值。",
@@ -2665,10 +2662,9 @@
   "content_scene": {"major_type": "产品舆情", "sub_type": "技术解读"},
   "emotion": "正面",
   "comment_type": "路人小白型",
-  "invalid_reason": "内容空洞无物",
   "tier": "无效",
   "strong_evidence": [],
-  "reason": "去空白后不足5字，且只有泛化支持，判为无效。",
+  "reason": "去空白后不足5字，且只有泛化支持，属于内容空洞无物，判为无效。",
   "dimensions": []
 }
 </pre>
